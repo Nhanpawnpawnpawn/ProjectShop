@@ -1,0 +1,39 @@
+/* Custom Styles for the Dropdown */
+.custom-navbar .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  margin-top: 10px;
+  padding: 0;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.custom-navbar .dropdown-menu.show {
+  display: block;
+}
+
+.custom-navbar .dropdown-item {
+  padding: 10px 15px;
+  color: #333;
+}
+
+.custom-navbar .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.custom-navbar .btn-link {
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+}
+
+.custom-navbar .nav-item {
+  display: flex;
+  align-items: center; /* Căn giữa các phần tử */
+  margin-left: 10px;
+}

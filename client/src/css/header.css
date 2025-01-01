@@ -1,0 +1,81 @@
+/* Custom navbar style */
+.custom-navbar {
+  background-color: #ffffff; /* Nền trắng */
+  padding: 0.5rem 1rem; /* Thêm khoảng cách giữa các phần tử */
+  border-bottom: 1px solid #e1e1e1; /* Viền dưới nhạt */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+}
+
+/* Logo */
+.custom-logo {
+  width: 100px; /* Kích thước logo */
+  height: auto;
+}
+
+/* Thanh tìm kiếm */
+.custom-search-input {
+  border-radius: 20px 0 0 20px; /* Bo tròn góc cho thanh tìm kiếm */
+  padding-left: 15px; /* Thêm khoảng cách bên trái */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+  border: 1px solid #ccc; /* Viền nhẹ */
+}
+
+.custom-search-btn {
+  border-radius: 0 20px 20px 0; /* Bo tròn góc cho nút tìm kiếm */
+  background-color: #28a745; /* Màu nền nút tìm kiếm */
+  color: white; /* Màu chữ nút tìm kiếm */
+  border: 1px solid #28a745; /* Viền cùng màu với nút */
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+.custom-search-btn:hover {
+  background-color: #218838; /* Màu nền khi hover */
+  border-color: #218838; /* Màu viền khi hover */
+}
+
+/* Mục điều hướng bên phải */
+.custom-nav-links .nav-link {
+  color: #333; /* Màu chữ cho các mục */
+  font-weight: 600; /* Tạo độ đậm cho chữ */
+  margin-right: 15px;
+  display: flex;
+  align-items: center; /* Canh giữa chữ và icon */
+}
+
+.custom-nav-links .nav-link i {
+  margin-right: 8px; /* Khoảng cách giữa icon và text */
+}
+
+.custom-nav-links .nav-link:hover {
+  color: #007bff; /* Màu khi hover (màu xanh dương) */
+}
+
+/* Khi màn hình nhỏ */
+@media (max-width: 768px) {
+  .custom-navbar {
+    padding: 0.5rem 0.5rem; /* Giảm khoảng cách khi trên màn hình nhỏ */
+  }
+
+  .custom-search-input {
+    width: 70%; /* Điều chỉnh lại chiều rộng thanh tìm kiếm */
+  }
+
+  .custom-search-btn {
+    width: 30%; /* Nút tìm kiếm sẽ nhỏ lại */
+  }
+
+  .custom-nav-links {
+    text-align: center; /* Canh giữa các liên kết khi màn hình nhỏ */
+    margin-top: 10px;
+  }
+
+  .custom-nav-links .nav-link {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .navbar-toggler {
+    border: none; /* Ẩn viền của hamburger */
+  }
+}

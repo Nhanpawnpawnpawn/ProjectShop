@@ -1,0 +1,84 @@
+.menu-container {
+  background-color: #00bfff;
+  transition: width 0.3s ease-in-out;
+}
+
+.menu-list .menu-item {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  text-align: left;
+  font-size: 16px;
+  color: white;
+  border: none;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background-color: #0099cc;
+  cursor: pointer;
+}
+
+.menu-item .menu-text {
+  margin-left: 10px;
+}
+
+@media (max-width: 1200px) {
+  .menu-container {
+    width: 200px;
+  }
+}
+
+/* For small screens */
+@media (max-width: 768px) {
+  .menu-container {
+    display: none; /* Hide the menu by default on small screens */
+  }
+
+  .menu-container.active {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-container {
+    width: 60px;
+  }
+}
+
+/* Trong file CSS của bạn, ví dụ như personalpage.css */
+.sidebar-container {
+  position: fixed;
+  min-height: 100vh;
+  background-color: #00bfff;
+  width: 20%; /* Đặt độ rộng cố định cho sidebar */
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar-content {
+  margin-left: 20%; /* Điều chỉnh margin-left để phù hợp với độ rộng của sidebar */
+  transition: margin-left 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .sidebar-container {
+    width: 100%; /* Đặt sidebar chiếm toàn bộ chiều rộng khi màn hình nhỏ */
+    padding: 10px;
+  }
+  .sidebar-content {
+    margin-left: 0; /* Reset margin-left về 0 trên các thiết bị nhỏ */
+  }
+}
+
+.menu-list li button.active {
+  background-color: #007bff; /* Đổi màu khi menu item được chọn */
+}
+
+.menu-container {
+  background-color: #00bfff;
+}
