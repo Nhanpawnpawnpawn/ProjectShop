@@ -18,7 +18,7 @@ const AuthPage = ({
     <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
       <div
         className="card shadow-lg border-0"
-        style={{ width: isLogin ? "500px" : "740px" }}
+        style={{ width: isLogin ? "500px" : "750px" }}
       >
         <div className="card-body p-3">
           <h2 className="text-center fw-bold text-primary mb-3">
