@@ -98,7 +98,7 @@ const ProductDetailPage = ({ product }) => {
         <img
           src={`http://localhost:3000/${product.multiImages[currentImageIndex]}`}
           alt={`Hình ảnh ${currentImageIndex + 1}`}
-          className="w-full object-cover h-[628]"
+          className="w-full object-cover max-h-[628px]"
         />
         <button
           onClick={handlePreviousImage}
