@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
 import {
   FaUser,
   FaShoppingCart,
@@ -18,7 +17,6 @@ import Revenue from "./Revenue";
 import ShopOrders from "./ShopOrders";
 import CustomerOrders from "./CustomerOrders";
 import ShipperOrders from "./ShipperOrders";
-import "../../css/personalpage.css";
 
 const PersonalPage = () => {
   const navigate = useNavigate();
@@ -28,13 +26,12 @@ const PersonalPage = () => {
   const [activeKey, setActiveKey] = useState("info");
   const [avatar, setAvatar] = useState(() => {
     const storedUserData = JSON.parse(localStorage.getItem("user"));
-    if (!storedUserData?.avatar) {
-      return storedUserData?.gender === "male"
+    return (
+      storedUserData?.avatar ||
+      (storedUserData?.gender === "male"
         ? "/images/male_avatar.png"
-        : "/images/female_avatar.png";
-    } else {
-      return storedUserData.avatar;
-    }
+        : "/images/female_avatar.png")
+    );
   });
 
   useEffect(() => {
@@ -160,109 +157,71 @@ const PersonalPage = () => {
   };
 
   return (
-    <Container fluid>
-      <Row>
-        {/* Sidebar */}
-        <Col
-          md={2}
-          className="menu-container text-white p-4"
-          style={{
-            position: "fixed",
-            minHeight: "100vh",
-            backgroundColor: "#00bfff",
-            borderRadius: "10px 0 0 10px",
-          }}
-        >
-          <div className="text-center">
-            <div className="position-relative">
-              <img
-                src={avatar}
-                alt="Avatar"
-                className="rounded-circle"
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  border: "2px solid #fff",
-                }}
-              />
-              <label
-                className="position-absolute"
-                style={{
-                  bottom: 0,
-                  right: 10,
-                  borderRadius: "100%",
-                  cursor: "pointer",
-                  padding: "5px",
-                  backgroundColor: "#00bfff",
-                  border: "2px solid #fff",
-                }}
-              >
-                <FaCamera style={{ fontSize: "20px", color: "#000" }} />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  style={{ display: "none" }}
-                />
-              </label>
-            </div>
-            <h5 className="text-white mt-3">{userData?.displayName}</h5>
-          </div>
-
-          {/* Menu */}
-          <nav>
-            <ul className="list-unstyled menu-list mt-4">
-              {renderMenuItems().map((item) => (
-                <li key={item.key}>
-                  <Button
-                    variant="link"
-                    onClick={() => setActiveKey(item.key)}
-                    className={`menu-item ${
-                      activeKey === item.key ? "active" : ""
-                    }`}
-                  >
-                    {item.icon}
-                    <span className="menu-text ms-3">{item.text}</span>
-                  </Button>
-                </li>
-              ))}
-              <li>
-                <Button
-                  variant="link"
-                  onClick={() => navigate("/")}
-                  className="menu-item"
-                >
-                  <FaHome className="me-3" />
-                  <span className="menu-text">Trang Chủ</span>
-                </Button>
-              </li>
-            </ul>
-          </nav>
-        </Col>
-
-        {/* Content */}
-        <Col
-          md={10}
-          className="content p-4 ms-auto"
-          style={{ marginLeft: "18%" }}
-        >
-          {activeKey === "info" && <PersonalInfo userData={userData} />}
-          {activeKey === "productList" && (
-            <ProductList
-              productList={productList}
-              onLoadMore={handleLoadMore}
-              hasMore={hasMore}
-              onDelete={handleDeleteProduct}
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <div className="w-1/5 bg-blue-500 text-white p-6 flex flex-col items-center">
+        <div className="relative">
+          <img
+            src={avatar}
+            alt="Avatar"
+            className="w-24 h-24 rounded-full border-4 border-white"
+          />
+          <label className="absolute bottom-0 right-2 bg-blue-500 border-2 border-white p-2 rounded-full cursor-pointer">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="hidden"
             />
-          )}
-          {activeKey === "addProduct" && <AddProduct userData={userData} />}
-          {activeKey === "revenue" && <Revenue shopName={shopName} />}
-          {activeKey === "shopOrders" && <ShopOrders />}
-          {activeKey === "customerOrders" && <CustomerOrders />}
-          {activeKey === "shipperOrders" && <ShipperOrders />}
-        </Col>
-      </Row>
-    </Container>
+          </label>
+        </div>
+        <h5 className="text-white mt-3 text-center">{userData?.displayName}</h5>
+
+        {/* Menu */}
+        <ul className="mt-6 space-y-4 w-full">
+          {renderMenuItems().map((item) => (
+            <li key={item.key}>
+              <button
+                onClick={() => setActiveKey(item.key)}
+                className={`w-full flex items-center p-3 rounded-lg hover:bg-blue-600 ${
+                  activeKey === item.key ? "bg-blue-600" : ""
+                }`}
+              >
+                {item.icon}
+                <span className="ml-3">{item.text}</span>
+              </button>
+            </li>
+          ))}
+          <li>
+            <button
+              onClick={() => navigate("/")}
+              className="w-full flex items-center p-3 rounded-lg hover:bg-blue-600"
+            >
+              <FaHome className="mr-3" />
+              <span>Trang Chủ</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 p-6">
+        {activeKey === "info" && <PersonalInfo userData={userData} />}
+        {activeKey === "productList" && (
+          <ProductList
+            productList={productList}
+            onLoadMore={handleLoadMore}
+            hasMore={hasMore}
+            onDelete={handleDeleteProduct}
+          />
+        )}
+        {activeKey === "addProduct" && <AddProduct userData={userData} />}
+        {activeKey === "revenue" && <Revenue shopName={shopName} />}
+        {activeKey === "shopOrders" && <ShopOrders />}
+        {activeKey === "customerOrders" && <CustomerOrders />}
+        {activeKey === "shipperOrders" && <ShipperOrders />}
+      </div>
+    </div>
   );
 };
 

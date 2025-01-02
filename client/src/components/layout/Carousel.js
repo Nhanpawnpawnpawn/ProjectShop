@@ -1,81 +1,107 @@
-import React from "react";
-import "../../css/home.css";
+import React, { useState } from "react";
 
 function Carousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const slides = [
+    {
+      src: "/images/home/la.jpg",
+    },
+    {
+      src: "/images/home/chicago.jpg",
+    },
+    {
+      src: "/images/home/ny1.jpg",
+    },
+  ];
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? slides.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === slides.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
   return (
-    <div className="container pt-2">
-      <div
-        id="carouselExampleAutoplaying"
-        className="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img
-              src="/images/home/la.jpg"
-              className="d-block w-100"
-              alt="Sản Phẩm 1"
-            />
-            <div className="carousel-caption d-none d-md-block">
-              <h5>Sản Phẩm 1</h5>
-              <p>Miêu tả ngắn về sản phẩm 1. Sản phẩm này rất hot!</p>
+    <div className="container mx-auto pt-4">
+      <div className="relative w-full overflow-hidden rounded-lg">
+        {/* Carousel Items */}
+        <div
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{
+            transform: `translateX(-${currentIndex * 100}%)`,
+          }}
+        >
+          {slides.map((slide, index) => (
+            <div key={index} className="w-full flex-shrink-0">
+              <img
+                src={slide.src}
+                alt={slide.title}
+                className="w-full h-[628px] object-cover"
+              />
             </div>
-          </div>
-
-          <div className="carousel-item">
-            <img
-              src="/images/home/chicago.jpg"
-              className="d-block w-100"
-              alt="Sản Phẩm 2"
-            />
-            <div className="carousel-caption d-none d-md-block">
-              <h5>Sản Phẩm 2</h5>
-              <p>
-                Miêu tả ngắn về sản phẩm 2. Sản phẩm này được yêu thích bởi
-                khách hàng.
-              </p>
-            </div>
-          </div>
-
-          <div className="carousel-item">
-            <img
-              src="/images/home/ny1.jpg"
-              className="d-block w-100"
-              alt="Sản Phẩm 3"
-            />
-            <div className="carousel-caption d-none d-md-block">
-              <h5>Sản Phẩm 3</h5>
-              <p>
-                Miêu tả ngắn về sản phẩm 3. Đây là lựa chọn tuyệt vời cho bạn!
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
 
+        {/* Navigation Buttons */}
         <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExampleAutoplaying"
-          data-bs-slide="prev"
+          onClick={handlePrev}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 focus:outline-none"
         >
-          <span
-            className="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Trước</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
         </button>
         <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExampleAutoplaying"
-          data-bs-slide="next"
+          onClick={handleNext}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 focus:outline-none"
         >
-          <span
-            className="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Sau</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
         </button>
+
+        {/* Dots Navigation */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full ${
+                index === currentIndex
+                  ? "bg-blue-500"
+                  : "bg-gray-300 hover:bg-gray-400"
+              }`}
+            ></button>
+          ))}
+        </div>
       </div>
     </div>
   );

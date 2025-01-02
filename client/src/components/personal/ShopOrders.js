@@ -9,8 +9,9 @@ const ShopOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedShipper, setSelectedShipper] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const storedUserData = JSON.parse(localStorage.getItem("user"));
 
-  // Fetch orders for the shop
+  // Get Đơn Hàng
   useEffect(() => {
     const fetchShopOrders = async () => {
       try {
@@ -27,7 +28,7 @@ const ShopOrders = () => {
     fetchShopOrders();
   }, [shopName]);
 
-  // Fetch shipper list
+  // Get Shipper
   useEffect(() => {
     const fetchShippers = async () => {
       try {
@@ -42,7 +43,7 @@ const ShopOrders = () => {
     fetchShippers();
   }, []);
 
-  // Approve order (only if a shipper is assigned)
+  // Duyệt Đơn
   const approveOrder = async (orderId, shipper) => {
     if (shipper === "Chưa Có") {
       alert("Vui lòng chọn shipper trước khi duyệt đơn!");
@@ -52,13 +53,28 @@ const ShopOrders = () => {
       await fetch(`http://localhost:3000/api/orders/${orderId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "Đang Vận Chuyển", shipper }),
+        body: JSON.stringify({
+          status: "Đang Vận Chuyển",
+          shipper,
+          addressshop:
+            storedUserData.address.specificAddress +
+            "," +
+            storedUserData.address.ward +
+            "," +
+            storedUserData.address.district +
+            "," +
+            storedUserData.address.city,
+          phoneshop: storedUserData.phone,
+        }),
       });
 
       setShopOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId
-            ? { ...order, status: "Đang Vận Chuyển" }
+            ? {
+                ...order,
+                status: "Đang Vận Chuyển",
+              }
             : order
         )
       );
@@ -67,7 +83,7 @@ const ShopOrders = () => {
     }
   };
 
-  // Assign shipper to order
+  // Set Shipper
   const assignShipper = async () => {
     if (!selectedOrder || !selectedShipper) return;
 
@@ -98,9 +114,10 @@ const ShopOrders = () => {
         <thead>
           <tr>
             <th>Mã Đơn</th>
-            <th>Sản Phẩm</th>
+            <th>Tên Sp</th>
             <th>Khách Hàng</th>
-            <th>Địa Chỉ</th>
+            <th>Địa Chỉ Khách Hàng</th>
+            <th>SĐT</th>
             <th>Tổng Tiền</th>
             <th>Trạng Thái</th>
             <th>Shipper</th>
@@ -115,6 +132,7 @@ const ShopOrders = () => {
                 <td>{order.productName}</td>
                 <td>{order.customerName}</td>
                 <td>{order.address}</td>
+                <td>{order.phone}</td>
                 <td>{order.totalAmount.toLocaleString()} VND</td>
                 <td>{order.status}</td>
                 <td>

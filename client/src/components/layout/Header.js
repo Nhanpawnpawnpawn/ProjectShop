@@ -1,143 +1,126 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../../css/header.css";
 import UserContext from "../../components/context/UserContext";
 
 function Header() {
-  const { user, setUser } = useContext(UserContext); // Sử dụng setUser để cập nhật trạng thái
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { user, setUser } = useContext(UserContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-  const toggleNavbar = () => setIsCollapsed(!isCollapsed);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-  // Kiểm tra và lấy thông tin người dùng từ localStorage khi component được tải lại
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("user"));
     const token = localStorage.getItem("token");
 
     if (savedUser && token) {
-      setUser(savedUser); // Cập nhật trạng thái người dùng từ localStorage
+      setUser(savedUser);
     }
   }, [setUser]);
 
-  // Xử lý khi nhấn vào Trang Cá Nhân
   const handleProfileClick = () => {
-    navigate(`/personalpage/${user.displayName}`, { state: { user } }); // Truyền dữ liệu người dùng
+    navigate(`/personalpage/${user.displayName}`, { state: { user } });
   };
 
-  // Xử lý khi nhấn Đăng Xuất
   const handleLogout = () => {
-    setUser({ isLoggedIn: false, displayName: "", username: "" }); // Reset trạng thái người dùng
-    localStorage.removeItem("token"); // Xóa token nếu được lưu
-    localStorage.removeItem("user"); // Xóa thông tin người dùng trong localStorage
-    navigate("/"); // Điều hướng về trang chủ
+    setUser({ isLoggedIn: false, displayName: "", username: "" });
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light custom-navbar">
-      <div className="container">
-        {/* Logo bên trái */}
-        <Link className="navbar-brand" to="/">
+    <nav className="bg-white border-b shadow">
+      <div className="container mx-auto px-4 flex items-center justify-between h-16">
+        {/* Logo */}
+        <Link to="/" className="flex items-center">
           <img
             src="https://via.placeholder.com/100x50?text=Logo"
             alt="Logo"
-            className="d-inline-block align-text-top custom-logo"
+            className="h-10 w-auto"
           />
         </Link>
 
-        {/* Thanh tìm kiếm ở giữa */}
-        <form className="d-flex w-50 mx-auto">
+        {/* Search Bar */}
+        <form className="hidden md:flex items-center w-1/2">
           <input
-            className="form-control me-2 custom-search-input"
-            type="search"
+            type="text"
+            className="flex-grow p-2 border rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Tìm kiếm sản phẩm..."
-            aria-label="Search"
           />
           <button
-            className="btn btn-outline-primary custom-search-btn"
             type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600"
           >
             Tìm
           </button>
         </form>
 
-        {/* Hamburger Menu */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded={!isCollapsed ? "true" : "false"}
-          aria-label="Toggle navigation"
-          onClick={toggleNavbar}
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        {/* Right Section */}
+        <div className="flex items-center space-x-4">
+          {user.isLoggedIn ? (
+            <>
+              {/* Cart */}
+              <Link
+                to="/cart"
+                className="text-gray-700 hover:text-blue-500 flex items-center"
+              >
+                <i className="fa fa-shopping-cart text-xl"></i>
+                <span className="ml-2">Giỏ Hàng</span>
+              </Link>
 
-        {/* Các mục bên phải */}
-        <div
-          className={`collapse navbar-collapse ${isCollapsed ? "" : "show"}`}
-          id="navbarNav"
-        >
-          <ul className="navbar-nav ms-auto custom-nav-links">
-            {user.isLoggedIn ? (
-              <>
-                {/* Giỏ Hàng */}
-                <li className="nav-item">
-                  <Link className="nav-link" to="/cart">
-                    <i className="fa fa-shopping-cart"></i> Giỏ Hàng
-                  </Link>
-                </li>
-
-                {/* Tên Người Dùng và Dropdown */}
-                <li className="nav-item dropdown">
-                  <button
-                    className="nav-link btn btn-link dropdown-toggle"
-                    onClick={toggleDropdown}
-                    aria-expanded={isDropdownOpen ? "true" : "false"}
-                  >
-                    <i className="fa fa-user"></i> {user.displayName}
-                  </button>
-                  <ul
-                    className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}
-                    aria-labelledby="navbarDropdown"
-                  >
+              {/* User Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={toggleDropdown}
+                  className="flex items-center text-gray-700 hover:text-blue-500"
+                >
+                  <i className="fa fa-user text-xl"></i>
+                  <span className="ml-2">{user.displayName}</span>
+                </button>
+                {isDropdownOpen && (
+                  <ul className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
                     <li>
                       <button
-                        className="dropdown-item"
                         onClick={handleProfileClick}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
                       >
                         Trang Cá Nhân
                       </button>
                     </li>
                     <li>
-                      <button className="dropdown-item" onClick={handleLogout}>
+                      <button
+                        onClick={handleLogout}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                      >
                         Đăng Xuất
                       </button>
                     </li>
                   </ul>
-                </li>
-              </>
-            ) : (
-              <>
-                {/* Đăng Ký */}
-                <li className="nav-item">
-                  <Link className="nav-link" to="/auth">
-                    <i className="fa fa-user-plus"></i> Đăng Ký
-                  </Link>
-                </li>
-                {/* Đăng Nhập */}
-                <li className="nav-item">
-                  <Link className="nav-link" to="/auth">
-                    <i className="fa fa-sign-in"></i> Đăng Nhập
-                  </Link>
-                </li>
-              </>
-            )}
-          </ul>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Register */}
+              <Link
+                to="/auth"
+                className="text-gray-700 hover:text-blue-500 flex items-center"
+              >
+                <i className="fa fa-user-plus text-xl"></i>
+                <span className="ml-2">Đăng Ký</span>
+              </Link>
+
+              {/* Login */}
+              <Link
+                to="/auth"
+                className="text-gray-700 hover:text-blue-500 flex items-center"
+              >
+                <i className="fa fa-sign-in text-xl"></i>
+                <span className="ml-2">Đăng Nhập</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

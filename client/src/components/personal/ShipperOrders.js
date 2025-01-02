@@ -62,8 +62,11 @@ const ShipperOrders = () => {
             <th>Mã Đơn</th>
             <th>Sản Phẩm</th>
             <th>Tên Shop</th>
+            <th>Địa Chỉ Shop</th>
+            <th>SĐT Shop</th>
             <th>Khách Hàng</th>
-            <th>Địa Chỉ</th>
+            <th>Địa Chỉ Khách Hàng</th>
+            <th>SĐT KH</th>
             <th>Tổng Tiền</th>
             <th>Trạng Thái</th>
             <th>Hành Động</th>
@@ -76,8 +79,11 @@ const ShipperOrders = () => {
                 <td>{order._id}</td>
                 <td>{order.productName}</td>
                 <td>{order.shopName}</td>
+                <td>{order.addressshop}</td>
+                <td>{order.phoneshop}</td>
                 <td>{order.customerName}</td>
                 <td>{order.address}</td>
+                <td>{order.phone}</td>
                 <td>{order.totalAmount.toLocaleString()} VND</td>
                 <td>{order.status}</td>
                 <td>

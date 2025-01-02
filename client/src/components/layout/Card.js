@@ -10,51 +10,63 @@ function Card({ cards, hasMore, fetchProducts }) {
   useEffect(() => {
     fetchProducts(currentPage);
   }, [currentPage]);
+
   return (
-    <div className="container mt-3">
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div className="container mx-auto mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {cards.map((card) => (
-          <div className="col" key={card._id}>
-            <Link to={`/product/${card._id}`} className="text-decoration-none">
-              <div className="card h-100 product-card">
-                <img
-                  src={
-                    `http://localhost:3000/${card.singleImage}` ||
-                    "https://via.placeholder.com/150"
-                  }
-                  className="card-img-top"
-                  alt={card.productName}
-                />
-                <div className="card-body">
-                  <div className="rating">
-                    {[...Array(5)].map((_, index) => (
-                      <span
-                        key={index}
-                        className={`fa fa-star ${
-                          index < card.stars ? "checked" : ""
-                        }`}
-                      ></span>
-                    ))}
-                  </div>
-                  <h5 className="card-title text-dark">{card.productName}</h5>
-                  <p className="card-text text-muted">{card.shopName}</p>
-                  <p className="card-text text-primary fw-bold">
-                    {card.productPrice
-                      ? `${card.productPrice.toLocaleString()} VND`
-                      : "Liên hệ"}
-                  </p>
+          <div
+            key={card._id}
+            className="bg-white shadow-lg rounded-lg overflow-hidden"
+          >
+            <Link
+              to={`/product/${card._id}`}
+              className="block transition-transform transform hover:scale-105"
+            >
+              <img
+                src={
+                  `http://localhost:3000/${card.singleImage}` ||
+                  "https://via.placeholder.com/150"
+                }
+                alt={card.productName}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <div className="flex items-center mb-2">
+                  {[...Array(5)].map((_, index) => (
+                    <span
+                      key={index}
+                      className={`fa fa-star ${
+                        index < card.stars ? "text-yellow-500" : "text-gray-300"
+                      }`}
+                    ></span>
+                  ))}
                 </div>
-                <div className="card-footer text-center">
-                  <button className="btn btn-danger w-100">Mua Ngay</button>
-                </div>
+                <h5 className="text-lg font-semibold text-gray-800">
+                  {card.productName}
+                </h5>
+                <p className="text-sm text-gray-600">{card.shopName}</p>
+                <p className="text-lg font-bold text-blue-600">
+                  {card.productPrice
+                    ? `${card.productPrice.toLocaleString()} VND`
+                    : "Liên hệ"}
+                </p>
+              </div>
+              <div className="p-4 bg-gray-100">
+                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition">
+                  Mua Ngay
+                </button>
               </div>
             </Link>
           </div>
         ))}
       </div>
       {hasMore && (
-        <div className="text-center mt-3">
-          <button className="btn btn-primary" onClick={handleLoadMore}>
+        <div className="text-center mt-6">
+          <button
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+            onClick={handleLoadMore}
+          >
             Xem Thêm
           </button>
         </div>

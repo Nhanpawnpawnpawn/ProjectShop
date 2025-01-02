@@ -7,8 +7,11 @@ const createOrder = async (req, res) => {
     shopName,
     totalAmount,
     address,
+    phone,
     status,
     shipper,
+    addressshop,
+    phoneshop,
   } = req.body;
   if (
     !productName ||
@@ -30,8 +33,11 @@ const createOrder = async (req, res) => {
       shopName,
       totalAmount,
       address,
+      phone,
       status,
       shipper,
+      addressshop,
+      phoneshop,
     });
 
     await newOrder.save();
@@ -77,7 +83,7 @@ const getOrdersByShop = async (req, res) => {
     const orders = await Order.find({ shopName })
       .sort({ createdAt: -1 }) // Sắp xếp theo thời gian mới nhất
       .select(
-        "_id customerName address totalAmount status shipper createdAt productName"
+        "_id customerName address phone totalAmount status shipper createdAt productName"
       ); // Chỉ lấy các trường cần thiết
 
     if (orders.length === 0) {
@@ -103,7 +109,7 @@ const getOrdersByShipper = async (req, res) => {
     const orders = await Order.find({ shipper: shopName })
       .sort({ createdAt: -1 }) // Sắp xếp theo thời gian mới nhất
       .select(
-        "_id shopName customerName address totalAmount status createdAt productName"
+        "_id shopName customerName address phone totalAmount status createdAt productName addressshop phoneshop"
       ); // Chỉ lấy các trường cần thiết
 
     if (orders.length === 0) {
@@ -125,7 +131,7 @@ const getOrdersByShipper = async (req, res) => {
 const approveOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { shipper } = req.body;
+    const { shipper, addressshop, phoneshop } = req.body;
 
     const order = await Order.findById(orderId);
     if (!order) {
@@ -134,6 +140,8 @@ const approveOrder = async (req, res) => {
 
     order.status = "Đang Vận Chuyển";
     order.shipper = shipper;
+    order.addressshop = addressshop;
+    order.phoneshop = phoneshop;
 
     await order.save();
     res.json({ message: "Order approved and shipper assigned", order });
