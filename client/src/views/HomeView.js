@@ -28,8 +28,10 @@ const HomeView = () => {
   return (
     <>
       <Header />
-      <Carousel />
-      <Card cards={cards} hasMore={hasMore} fetchProducts={fetchProducts} />
+      <div className="container pb-4 border-r border-l">
+        <Carousel />
+        <Card cards={cards} hasMore={hasMore} fetchProducts={fetchProducts} />
+      </div>
       <Footer />
     </>
   );

@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 
 const ProductDetailPage = ({ product }) => {
+  const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
   const [showAddressForm, setShowAddressForm] = useState(false);
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
   const UserData = JSON.parse(localStorage.getItem("user"));
+  const cart = JSON.parse(localStorage.getItem("cart")) || []; // Lấy giỏ hàng hiện tại từ localStorage
+  const [quantity, setQuantity] = useState(1);
+  const [address, setAddress] = useState(
+    `${UserData.address.specificAddress}, ${UserData.address.ward}, ${UserData.address.district}, ${UserData.address.city}`
+  );
+  const [phone, setPhone] = useState(UserData.phone);
 
   const handleNextImage = () => {
     setCurrentImageIndex(
@@ -24,11 +28,30 @@ const ProductDetailPage = ({ product }) => {
   };
 
   const handleAddToCart = () => {
+    const existingProductIndex = cart.findIndex(
+      (item) => item.productId === id
+    );
+
+    if (existingProductIndex >= 0) {
+      // Sản phẩm đã tồn tại trong giỏ hàng
+      cart[existingProductIndex].quantity += quantity;
+    } else {
+      // Thêm sản phẩm mới vào giỏ hàng
+      cart.push({
+        productId: id,
+        productName: product.productName,
+        quantity: quantity,
+        productPrice: product.productPrice,
+        image: product.singleImage, // Lưu hình ảnh đầu tiên làm đại diện
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart)); // Lưu giỏ hàng vào localStorage
     alert(`Đã thêm ${quantity} ${product.productName} vào giỏ hàng!`);
   };
 
   const handleBuyNow = async () => {
-    if (UserData.accountType == "shop" || UserData.accountType == "shipper") {
+    if (UserData.accountType === "shop" || UserData.accountType === "shipper") {
       alert("Shop và Shipper không thể đặc hàng!");
       return;
     }
@@ -89,6 +112,16 @@ const ProductDetailPage = ({ product }) => {
     setPhone(UserData.phone);
   };
 
+  useEffect(() => {
+    const existingProductIndex = cart.findIndex(
+      (item) => item.productId === id
+    );
+    if (existingProductIndex >= 0) {
+      setQuantity(cart[existingProductIndex].quantity);
+    }
+    console.log(existingProductIndex);
+  }, [id]);
+
   const calculatedPrice = product.productPrice * quantity;
 
   return (
@@ -124,10 +157,9 @@ const ProductDetailPage = ({ product }) => {
           ))}
         </div>
       </div>
-
       {/* Thông Tin Sản Phẩm */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
+        <div className="bg-white p-6 rounded-lg shadow-sm border">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
             {product.productName}
           </h1>
@@ -135,7 +167,7 @@ const ProductDetailPage = ({ product }) => {
             {product.productDescription}
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="bg-white p-6 rounded-lg shadow-sm border">
           <Link to={`/shop/${product.shopName}`} className="text-blue-600">
             <h4 className="text-lg font-bold mb-2">Shop: {product.shopName}</h4>
           </Link>
@@ -153,7 +185,7 @@ const ProductDetailPage = ({ product }) => {
             {calculatedPrice.toLocaleString()} VND
           </h3>
           <div className="flex items-center mb-4">
-            <span className="text-gray-700 mr-2">Số lượng:</span>
+            <span className="text-gray-700 mr-2">Số lượng :</span>
             <input
               type="number"
               className="border border-gray-300 rounded px-2 py-1 w-20"
@@ -178,10 +210,9 @@ const ProductDetailPage = ({ product }) => {
           </div>
         </div>
       </div>
-
       {/* Form Nhập Địa Chỉ */}
       {showAddressForm && (
-        <div className="bg-white p-6 mt-6 rounded-lg shadow-lg">
+        <div className="bg-white p-6 mt-6 rounded-lg shadow-md border">
           <div className="mb-4">
             <label htmlFor="address" className="block text-gray-700 mb-2">
               Nhập địa chỉ giao hàng :
@@ -190,34 +221,28 @@ const ProductDetailPage = ({ product }) => {
               type="text"
               id="address"
               className="w-full border border-gray-300 rounded px-3 py-2"
-              value={
-                UserData.address.specificAddress +
-                "," +
-                UserData.address.ward +
-                "," +
-                UserData.address.district +
-                "," +
-                UserData.address.city
-              }
-              onChange={(e) => setAddress(e.target.value)}
+              value={address} // Giá trị được quản lý bởi state
+              onChange={(e) => setAddress(e.target.value)} // Cập nhật giá trị state khi người dùng nhập liệu
               required
             />
-            <label htmlFor="address" className="block text-gray-700 mb-2">
+          </div>
+          <div className="mb-4">
+            <label htmlFor="phone" className="block text-gray-700 mb-2">
               Nhập số điện thoại :
             </label>
             <input
               type="text"
               id="phone"
               className="w-full border border-gray-300 rounded px-3 py-2"
-              value={UserData.phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={phone} // Giá trị được quản lý bởi state
+              onChange={(e) => setPhone(e.target.value)} // Cập nhật giá trị state khi người dùng nhập liệu
               required
             />
           </div>
           <div className="flex gap-4">
             <button
               className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
-              onClick={handleBuyNow}
+              onClick={() => handleBuyNow(address, phone)} // Gửi địa chỉ và số điện thoại được cập nhật
             >
               Xác nhận mua hàng
             </button>

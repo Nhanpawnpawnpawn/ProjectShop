@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col, Card, Alert } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 
 const AddProduct = ({ userData }) => {
@@ -50,8 +49,8 @@ const AddProduct = ({ userData }) => {
     productData.append("shopName", userData.displayName);
     productData.append("stars", formData.stars);
     productData.append("singleImage", singleImage);
-    multiImages.forEach((file, idx) => {
-      productData.append(`multiImages`, file);
+    multiImages.forEach((file) => {
+      productData.append("multiImages", file);
     });
 
     // Gửi yêu cầu lên server
@@ -82,135 +81,172 @@ const AddProduct = ({ userData }) => {
   };
 
   return (
-    <div className="container">
-      <h4
-        className="mb-4 text-center text-primary font-weight-bold"
-        style={{ fontSize: "28px" }}
-      >
+    <div className="container mx-auto px-4 py-8">
+      <h4 className="mb-6 text-center text-blue-600 font-bold text-2xl">
         Thêm Sản Phẩm
       </h4>
 
       {alertMessage && (
-        <Alert
-          variant={alertMessage.type}
-          onClose={() => setAlertMessage(null)}
-          dismissible
+        <div
+          className={`alert ${
+            alertMessage.type === "success"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          } p-4 rounded mb-4`}
         >
-          {alertMessage.message}
-        </Alert>
+          <span>{alertMessage.message}</span>
+        </div>
       )}
 
-      <Form onSubmit={handleSubmit}>
-        <Card className="shadow-sm p-4 mb-4">
-          <Row>
-            <Col md={6}>
-              <Form.Group controlId="productName">
-                <Form.Label>Tên sản phẩm</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập tên sản phẩm"
-                  name="productName"
-                  value={formData.productName}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="productShop">
-                <Form.Label>Tên shop</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={userData.displayName}
-                  disabled
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Form.Group controlId="productDescription" className="mt-3">
-            <Form.Label>Mô tả</Form.Label>
-            <Form.Control
-              as="textarea"
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-white p-6 shadow border rounded">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                className="block text-gray-700 font-medium mb-2"
+                htmlFor="productName"
+              >
+                Tên sản phẩm
+              </label>
+              <input
+                type="text"
+                id="productName"
+                name="productName"
+                placeholder="Nhập tên sản phẩm"
+                value={formData.productName}
+                onChange={handleInputChange}
+                className="w-full border rounded px-4 py-2 focus:ring focus:ring-blue-300"
+              />
+            </div>
+            <div>
+              <label
+                className="block text-gray-700 font-medium mb-2"
+                htmlFor="productShop"
+              >
+                Tên shop
+              </label>
+              <input
+                type="text"
+                id="productShop"
+                value={userData.displayName}
+                disabled
+                className="w-full border rounded px-4 py-2 bg-gray-100"
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <label
+              className="block text-gray-700 font-medium mb-2"
+              htmlFor="productDescription"
+            >
+              Mô tả
+            </label>
+            <textarea
+              id="productDescription"
+              name="productDescription"
               rows={3}
               placeholder="Nhập mô tả sản phẩm"
-              name="productDescription"
               value={formData.productDescription}
               onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Row className="mt-3">
-            <Col md={6}>
-              <Form.Group controlId="productPrice">
-                <Form.Label>Giá sản phẩm</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Nhập giá sản phẩm"
-                  name="productPrice"
-                  value={formData.productPrice}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="stars">
-                <Form.Label>Số sao đánh giá</Form.Label>
-                <Form.Control type="text" value="3 Sao" disabled />
-              </Form.Group>
-            </Col>
-          </Row>
-        </Card>
+              className="w-full border rounded px-4 py-2 focus:ring focus:ring-blue-300"
+            ></textarea>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <label
+                className="block text-gray-700 font-medium mb-2"
+                htmlFor="productPrice"
+              >
+                Giá sản phẩm
+              </label>
+              <input
+                type="number"
+                id="productPrice"
+                name="productPrice"
+                placeholder="Nhập giá sản phẩm"
+                value={formData.productPrice}
+                onChange={handleInputChange}
+                className="w-full border rounded px-4 py-2 focus:ring focus:ring-blue-300"
+              />
+            </div>
+            <div>
+              <label
+                className="block text-gray-700 font-medium mb-2"
+                htmlFor="stars"
+              >
+                Số sao đánh giá
+              </label>
+              <input
+                type="text"
+                id="stars"
+                value="3 Sao"
+                disabled
+                className="w-full border rounded px-4 py-2 bg-gray-100"
+              />
+            </div>
+          </div>
+        </div>
 
-        {/* Hình ảnh sản phẩm */}
-        <Card className="shadow-sm p-4 mb-4">
-          <Form.Group controlId="singleImage">
-            <Form.Label>Hình ảnh chính sản phẩm</Form.Label>
-            <Form.Control
+        <div className="bg-white p-6 shadow border rounded">
+          <div>
+            <label
+              className="block text-gray-700 font-medium mb-2"
+              htmlFor="singleImage"
+            >
+              Hình ảnh chính sản phẩm
+            </label>
+            <input
               type="file"
+              id="singleImage"
               accept="image/*"
               onChange={handleSingleImageUpload}
+              className="w-full border rounded px-4 py-2"
             />
             {singleImage && (
               <img
                 src={URL.createObjectURL(singleImage)}
                 alt="Preview"
-                className="mt-2"
-                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                className="mt-4 w-24 h-24 object-cover"
               />
             )}
-          </Form.Group>
-
-          <Form.Group controlId="multiImages" className="mt-3">
-            <Form.Label>Tải lên ít nhất 3 hình ảnh</Form.Label>
-            <Form.Control
+          </div>
+          <div className="mt-4">
+            <label
+              className="block text-gray-700 font-medium mb-2"
+              htmlFor="multiImages"
+            >
+              Tải lên ít nhất 3 hình ảnh
+            </label>
+            <input
               type="file"
+              id="multiImages"
               multiple
               accept="image/*"
               onChange={handleMultiImageUpload}
+              className="w-full border rounded px-4 py-2"
             />
             {multiImages.length > 0 && (
-              <div className="mt-2">
+              <div className="mt-4 flex flex-wrap gap-4">
                 {multiImages.map((file, idx) => (
                   <img
                     key={idx}
                     src={URL.createObjectURL(file)}
                     alt={`Preview ${idx + 1}`}
-                    className="me-2"
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "cover",
-                    }}
+                    className="w-24 h-24 object-cover"
                   />
                 ))}
               </div>
             )}
-          </Form.Group>
-        </Card>
+          </div>
+        </div>
 
-        {/* Submit Button */}
-        <Button variant="success" type="submit" className="mt-4 float-end">
-          <FaPlus /> Thêm sản phẩm
-        </Button>
-      </Form>
+        <button
+          type="submit"
+          className="bg-green-500 text-white font-medium py-2 px-6 rounded shadow hover:bg-green-600 transition float-right"
+        >
+          <FaPlus className="inline-block mr-2" /> Thêm sản phẩm
+        </button>
+      </form>
     </div>
   );
 };

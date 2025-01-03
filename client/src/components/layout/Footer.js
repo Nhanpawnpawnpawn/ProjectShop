@@ -3,7 +3,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function Footer() {
   return (
-    <footer className="bg-white text-gray-700 pt-10 pb-6 shadow-md">
+    <footer className="bg-white text-gray-700 pt-10 pb-6 border-t">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Cột Hỗ Trợ Khách Hàng */}

@@ -21,7 +21,7 @@ const updateAvatar = async (req, res) => {
 
     // Xóa avatar cũ nếu có
     if (user.avatar) {
-      const oldPath = path.join(__dirname, "../public", user.avatar);
+      const oldPath = path.join(__dirname, "../", user.avatar);
       if (fs.existsSync(oldPath)) {
         fs.unlinkSync(oldPath); // Xóa file avatar cũ khỏi server
       }
@@ -30,7 +30,6 @@ const updateAvatar = async (req, res) => {
     // Cập nhật avatar trong cơ sở dữ liệu
     user.avatar = avatarPath;
     await user.save();
-
     res.status(200).json({
       message: "Avatar được cập nhật thành công",
       avatar: avatarPath, // Trả về đường dẫn avatar mới

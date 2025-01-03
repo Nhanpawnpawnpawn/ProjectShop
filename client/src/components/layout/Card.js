@@ -4,56 +4,62 @@ import "../../css/card.css";
 
 function Card({ cards, hasMore, fetchProducts }) {
   const [currentPage, setCurrentPage] = useState(1);
+
   const handleLoadMore = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
+
   useEffect(() => {
     fetchProducts(currentPage);
   }, [currentPage]);
 
   return (
-    <div className="container mx-auto mt-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="container mx-auto mt-8 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {cards.map((card) => (
           <div
             key={card._id}
-            className="bg-white shadow-lg rounded-lg overflow-hidden"
+            className="bg-white shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-lg border"
           >
-            <Link
-              to={`/product/${card._id}`}
-              className="block transition-transform transform hover:scale-105"
-            >
-              <img
-                src={
-                  `http://localhost:3000/${card.singleImage}` ||
-                  "https://via.placeholder.com/150"
-                }
-                alt={card.productName}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <div className="flex items-center mb-2">
-                  {[...Array(5)].map((_, index) => (
-                    <span
-                      key={index}
-                      className={`fa fa-star ${
-                        index < card.stars ? "text-yellow-500" : "text-gray-300"
-                      }`}
-                    ></span>
-                  ))}
-                </div>
-                <h5 className="text-lg font-semibold text-gray-800">
+            <Link to={`/product/${card._id}`} className="block">
+              <div className="relative">
+                <img
+                  src={
+                    `http://localhost:3000/${card.singleImage}` ||
+                    "https://via.placeholder.com/150"
+                  }
+                  alt={card.productName}
+                  className="w-full h-56 object-cover"
+                />
+                {card.isOnSale && (
+                  <span className="absolute top-2 right-2 bg-red-500 text-white text-sm font-bold py-1 px-3 rounded-lg shadow">
+                    Sale
+                  </span>
+                )}
+              </div>
+              <div className="px-4 pt-4">
+                <h5 className="text-lg font-semibold text-gray-800 truncate">
                   {card.productName}
                 </h5>
-                <p className="text-sm text-gray-600">{card.shopName}</p>
-                <p className="text-lg font-bold text-blue-600">
+                <p className="text-sm text-gray-500">{card.shopName}</p>
+                <div className="flex items-center my-2">
+                  {[...Array(5)].map((_, index) => (
+                    <i
+                      key={index}
+                      className={`fa fa-star ${
+                        index < card.stars ? "text-yellow-400" : "text-gray-300"
+                      }`}
+                    ></i>
+                  ))}
+                </div>
+                <p className="text-2xl font-bold text-right text-blue-600">
                   {card.productPrice
-                    ? `${card.productPrice.toLocaleString()} VND`
+                    ? `${card.productPrice.toLocaleString()}`
                     : "Liên hệ"}
                 </p>
               </div>
-              <div className="p-4 bg-gray-100">
-                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition">
+              <div className="p-4 bg-gray-50">
+                <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition font-medium">
                   Mua Ngay
                 </button>
               </div>
@@ -62,9 +68,9 @@ function Card({ cards, hasMore, fetchProducts }) {
         ))}
       </div>
       {hasMore && (
-        <div className="text-center mt-6">
+        <div className="text-center mt-8">
           <button
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition shadow font-medium"
             onClick={handleLoadMore}
           >
             Xem Thêm

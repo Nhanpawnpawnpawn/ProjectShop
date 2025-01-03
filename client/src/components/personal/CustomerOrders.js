@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Table, Button } from "react-bootstrap";
 
 const CustomerOrders = () => {
   const { shopName } = useParams();
@@ -27,42 +26,60 @@ const CustomerOrders = () => {
   };
 
   return (
-    <div>
-      <h3>Đơn Hàng Của {shopName}</h3>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Mã Đơn</th>
-            <th>Sản Phẩm</th>
-            <th>Tổng Tiền</th>
-            <th>Trạng Thái</th>
-            <th>Hành Động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(customerOrders) && customerOrders.length > 0 ? (
-            customerOrders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>{order.productName}</td>
-                <td>{order.totalAmount.toLocaleString()} VND</td>
-                <td>{order.status}</td>
-                <td>
-                  <Button onClick={() => rateProduct(order.productName)}>
-                    Đánh Giá
-                  </Button>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <h3 className="text-2xl font-bold mb-6 text-center">
+        Đơn Hàng Của {shopName}
+      </h3>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-2 border border-gray-300">Mã Đơn</th>
+              <th className="px-4 py-2 border border-gray-300">Sản Phẩm</th>
+              <th className="px-4 py-2 border border-gray-300">Tổng Tiền</th>
+              <th className="px-4 py-2 border border-gray-300">Trạng Thái</th>
+              <th className="px-4 py-2 border border-gray-300">Hành Động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(customerOrders) && customerOrders.length > 0 ? (
+              customerOrders.map((order) => (
+                <tr key={order._id} className="odd:bg-white even:bg-gray-50">
+                  <td className="px-4 py-2 border border-gray-300">
+                    {order._id}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {order.productName}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {order.totalAmount.toLocaleString()} VND
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {order.status}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    <button
+                      onClick={() => rateProduct(order.productName)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      Đánh Giá
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="5"
+                  className="px-4 py-2 text-center border border-gray-300"
+                >
+                  Không có đơn hàng nào
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="5" className="text-center">
-                Không có đơn hàng nào
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

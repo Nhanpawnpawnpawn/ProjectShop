@@ -78,18 +78,20 @@ const PersonalPage = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const fetchProducts = async (page) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/productshop/${shopName}?page=${page}&limit=20`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch products");
+    if (userData.accountType === "shop") {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/productshop/${shopName}?page=${page}&limit=20`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        setProductList((prevCards) => [...prevCards, ...data.data]);
+        setHasMore(page < data.totalPages);
+      } catch (error) {
+        console.error("Error fetching products:", error);
       }
-      const data = await response.json();
-      setProductList((prevCards) => [...prevCards, ...data.data]);
-      setHasMore(page < data.totalPages);
-    } catch (error) {
-      console.error("Error fetching products:", error);
     }
   };
 
@@ -107,6 +109,7 @@ const PersonalPage = () => {
       );
 
       if (!response.ok) {
+        const message = await response.json();
         throw new Error("Failed to delete product");
       }
 
@@ -115,7 +118,7 @@ const PersonalPage = () => {
       );
     } catch (error) {
       console.error("Error deleting product:", error);
-      alert("Failed to delete product");
+      alert("Failed to delete product", error);
     }
   };
 

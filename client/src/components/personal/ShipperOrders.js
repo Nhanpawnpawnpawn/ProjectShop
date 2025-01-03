@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Table, Button } from "react-bootstrap";
 
 const ShipperOrders = () => {
   const { shopName } = useParams();
@@ -24,7 +23,6 @@ const ShipperOrders = () => {
 
   const markAsDelivered = async (orderId, shopName, totalAmount) => {
     try {
-      // Gửi yêu cầu cập nhật trạng thái đơn hàng
       const response = await fetch(
         `http://localhost:3000/api/orders/${orderId}/deliver`,
         {
@@ -33,7 +31,6 @@ const ShipperOrders = () => {
       );
 
       if (response.ok) {
-        // Sau khi đơn hàng được đánh dấu là đã giao, cập nhật doanh thu của shop
         await fetch(`http://localhost:3000/api/revenue/${shopName}/update`, {
           method: "POST",
           headers: {
@@ -41,7 +38,7 @@ const ShipperOrders = () => {
           },
           body: JSON.stringify({ amount: totalAmount }),
         });
-        // Cập nhật lại trạng thái đơn hàng trong giao diện
+
         setShipperOrders((prev) =>
           prev.map((order) =>
             order._id === orderId ? { ...order, status: "Đã Giao" } : order
@@ -54,64 +51,77 @@ const ShipperOrders = () => {
   };
 
   return (
-    <div>
-      <h3>Đơn Hàng Của Shipper {shopName}</h3>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Mã Đơn</th>
-            <th>Sản Phẩm</th>
-            <th>Tên Shop</th>
-            <th>Địa Chỉ Shop</th>
-            <th>SĐT Shop</th>
-            <th>Khách Hàng</th>
-            <th>Địa Chỉ Khách Hàng</th>
-            <th>SĐT KH</th>
-            <th>Tổng Tiền</th>
-            <th>Trạng Thái</th>
-            <th>Hành Động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(shipperOrders) && shipperOrders.length > 0 ? (
-            shipperOrders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>{order.productName}</td>
-                <td>{order.shopName}</td>
-                <td>{order.addressshop}</td>
-                <td>{order.phoneshop}</td>
-                <td>{order.customerName}</td>
-                <td>{order.address}</td>
-                <td>{order.phone}</td>
-                <td>{order.totalAmount.toLocaleString()} VND</td>
-                <td>{order.status}</td>
-                <td>
-                  {order.status !== "Đã Giao" && (
-                    <Button
-                      onClick={() =>
-                        markAsDelivered(
-                          order._id,
-                          order.shopName,
-                          order.totalAmount
-                        )
-                      }
-                    >
-                      Đã Giao
-                    </Button>
-                  )}
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <h3 className="text-xl font-bold mb-6">
+        Đơn Hàng Của Shipper {shopName}
+      </h3>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="px-4 py-2 border">Mã Đơn</th>
+              <th className="px-4 py-2 border">Sản Phẩm</th>
+              <th className="px-4 py-2 border">Tên Shop</th>
+              <th className="px-4 py-2 border">Địa Chỉ Shop</th>
+              <th className="px-4 py-2 border">SĐT Shop</th>
+              <th className="px-4 py-2 border">Khách Hàng</th>
+              <th className="px-4 py-2 border">Địa Chỉ KH</th>
+              <th className="px-4 py-2 border">SĐT KH</th>
+              <th className="px-4 py-2 border">Tổng Tiền</th>
+              <th className="px-4 py-2 border">Trạng Thái</th>
+              <th className="px-4 py-2 border">Hành Động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(shipperOrders) && shipperOrders.length > 0 ? (
+              shipperOrders.map((order) => (
+                <tr
+                  key={order._id}
+                  className="odd:bg-white even:bg-gray-50 hover:bg-gray-100"
+                >
+                  <td className="px-4 py-2 border">{order._id}</td>
+                  <td className="px-4 py-2 border">{order.productName}</td>
+                  <td className="px-4 py-2 border">{order.shopName}</td>
+                  <td className="px-4 py-2 border">{order.addressshop}</td>
+                  <td className="px-4 py-2 border">{order.phoneshop}</td>
+                  <td className="px-4 py-2 border">{order.customerName}</td>
+                  <td className="px-4 py-2 border">{order.address}</td>
+                  <td className="px-4 py-2 border">{order.phone}</td>
+                  <td className="px-4 py-2 border">
+                    {order.totalAmount.toLocaleString()} VND
+                  </td>
+                  <td className="px-4 py-2 border">{order.status}</td>
+                  <td className="px-4 py-2 border">
+                    {order.status !== "Đã Giao" && (
+                      <button
+                        onClick={() =>
+                          markAsDelivered(
+                            order._id,
+                            order.shopName,
+                            order.totalAmount
+                          )
+                        }
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Đã Giao
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="11"
+                  className="px-4 py-2 text-center text-gray-500"
+                >
+                  Không có đơn hàng nào
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="8" className="text-center">
-                Không có đơn hàng nào
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

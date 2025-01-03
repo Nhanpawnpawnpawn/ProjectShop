@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Table, Button, Modal, Form } from "react-bootstrap";
 
 const ShopOrders = () => {
   const { shopName } = useParams();
@@ -108,99 +107,131 @@ const ShopOrders = () => {
   };
 
   return (
-    <div>
-      <h3>Đơn Hàng Của Shop {shopName}</h3>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Mã Đơn</th>
-            <th>Tên Sp</th>
-            <th>Khách Hàng</th>
-            <th>Địa Chỉ Khách Hàng</th>
-            <th>SĐT</th>
-            <th>Tổng Tiền</th>
-            <th>Trạng Thái</th>
-            <th>Shipper</th>
-            <th>Hành Động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(shopOrders) && shopOrders.length > 0 ? (
-            shopOrders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>{order.productName}</td>
-                <td>{order.customerName}</td>
-                <td>{order.address}</td>
-                <td>{order.phone}</td>
-                <td>{order.totalAmount.toLocaleString()} VND</td>
-                <td>{order.status}</td>
-                <td>
-                  {order.shipper !== "Chưa Có" ? (
-                    <span>{order.shipper}</span>
-                  ) : (
-                    <Button
-                      onClick={() => {
-                        setSelectedOrder(order._id);
-                        setShowModal(true);
-                      }}
-                    >
-                      Chọn Shipper
-                    </Button>
-                  )}
-                </td>
-                <td>
-                  {order.shipper && order.status === "Đặt Hàng" && (
-                    <Button
-                      onClick={() => approveOrder(order._id, order.shipper)}
-                      className="me-2"
-                    >
-                      Duyệt Đơn
-                    </Button>
-                  )}
+    <div className="p-6 bg-gray-100 border border-gray-300 rounded-md">
+      <h3 className="text-xl font-bold mb-4">Đơn Hàng Của Shop {shopName}</h3>
+      <div className="overflow-x-auto border border-gray-300 rounded-md">
+        <table className="min-w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-2 border-b border-gray-300">Mã Đơn</th>
+              <th className="px-4 py-2 border-b border-gray-300">Tên SP</th>
+              <th className="px-4 py-2 border-b border-gray-300">Khách Hàng</th>
+              <th className="px-4 py-2 border-b border-gray-300">
+                Địa Chỉ Khách Hàng
+              </th>
+              <th className="px-4 py-2 border-b border-gray-300">SĐT</th>
+              <th className="px-4 py-2 border-b border-gray-300">Tổng Tiền</th>
+              <th className="px-4 py-2 border-b border-gray-300">Trạng Thái</th>
+              <th className="px-4 py-2 border-b border-gray-300">Shipper</th>
+              <th className="px-4 py-2 border-b border-gray-300">Hành Động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(shopOrders) && shopOrders.length > 0 ? (
+              shopOrders.map((order) => (
+                <tr key={order._id} className="odd:bg-white even:bg-gray-50">
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order._id}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order.productName}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order.customerName}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order.address}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order.phone}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order.totalAmount.toLocaleString()} VND
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order.status}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order.shipper !== "Chưa Có" ? (
+                      <span>{order.shipper}</span>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setSelectedOrder(order._id);
+                          setShowModal(true);
+                        }}
+                        className="text-blue-500 hover:underline"
+                      >
+                        Chọn Shipper
+                      </button>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300">
+                    {order.shipper && order.status === "Đặt Hàng" && (
+                      <button
+                        onClick={() => approveOrder(order._id, order.shipper)}
+                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                      >
+                        Duyệt Đơn
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="9"
+                  className="px-4 py-2 text-center border-b border-gray-300"
+                >
+                  Không có đơn hàng nào
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="8" className="text-center">
-                Không có đơn hàng nào
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Modal to select shipper */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Chọn Shipper</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Group>
-            <Form.Label>Chọn Shipper</Form.Label>
-            <Form.Select
-              value={selectedShipper}
-              onChange={(e) => setSelectedShipper(e.target.value)}
-            >
-              <option value="">Chọn...</option>
-              {shippers.map((shipper) => (
-                <option key={shipper._id} value={shipper.displayName}>
-                  {shipper.displayName}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Đóng
-          </Button>
-          <Button variant="primary" onClick={assignShipper}>
-            Giao Shipper
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-md shadow-lg p-6 w-96">
+            <h3 className="text-lg font-bold mb-4">Chọn Shipper</h3>
+            <div className="mb-4">
+              <label htmlFor="shipper" className="block font-medium mb-2">
+                Chọn Shipper
+              </label>
+              <select
+                id="shipper"
+                value={selectedShipper}
+                onChange={(e) => setSelectedShipper(e.target.value)}
+                className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Chọn...</option>
+                {shippers.map((shipper) => (
+                  <option key={shipper._id} value={shipper.displayName}>
+                    {shipper.displayName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowModal(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600"
+              >
+                Đóng
+              </button>
+              <button
+                onClick={assignShipper}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Giao Shipper
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

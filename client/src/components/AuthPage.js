@@ -15,23 +15,23 @@ const AuthPage = ({
   showModal,
 }) => {
   return (
-    <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
-      <div
-        className="card shadow-lg border-0"
-        style={{ width: isLogin ? "500px" : "750px" }}
-      >
-        <div className="card-body p-3">
-          <h2 className="text-center fw-bold text-primary mb-3">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className={`card shadow-lg ${isLogin ? "w-96" : "w-[750px]"}`}>
+        <div className="card-body p-6">
+          <h2 className="text-center font-bold text-[25px] text-primary mb-6">
             {isLogin ? "Đăng nhập" : "Đăng ký"}
           </h2>
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="username" className="form-label">
+            <div className="mb-4">
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Tài khoản
               </label>
               <input
                 type="text"
-                className="form-control"
+                className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 id="username"
                 name="username"
                 value={formData.username}
@@ -40,15 +40,19 @@ const AuthPage = ({
                 required
               />
             </div>
+
             {!isLogin && (
               <>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
+                <div className="mb-4">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Email
                   </label>
                   <input
                     type="email"
-                    className="form-control"
+                    className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     id="email"
                     name="email"
                     value={formData.email}
@@ -57,13 +61,17 @@ const AuthPage = ({
                     required
                   />
                 </div>
-                <div className="mb-3">
-                  <label htmlFor="phone" className="form-label">
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Số điện thoại
                   </label>
                   <input
                     type="tel"
-                    className="form-control"
+                    className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     id="phone"
                     name="phone"
                     value={formData.phone}
@@ -72,13 +80,17 @@ const AuthPage = ({
                     required
                   />
                 </div>
-                <div className="mb-3">
-                  <label htmlFor="displayName" className="form-label">
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="displayName"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Tên hiển thị
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     id="displayName"
                     name="displayName"
                     value={formData.displayName}
@@ -87,181 +99,179 @@ const AuthPage = ({
                     required
                   />
                 </div>
-                <div className="mb-3">
-                  <div className="mb-3">
-                    <div className="row">
-                      <div className="col-md-4">
-                        <label className="form-label">Thành phố</label>
-                        <select
-                          className="form-control"
-                          name="address.city"
-                          value={formData.address.city}
-                          onChange={handleChange}
-                          required
-                        >
-                          <option value="">Thành phố</option>
-                          {cities.map((city) => (
-                            <option key={city._id} value={city.name}>
-                              {city.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="col-md-4">
-                        <label className="form-label">Quận/Huyện</label>
-                        <select
-                          className="form-control"
-                          name="address.district"
-                          value={formData.address.district}
-                          onChange={handleChange}
-                          required
-                          disabled={!districts.length}
-                        >
-                          <option value="">Quận/Huyện</option>
-                          {districts.map((district) => (
-                            <option key={district.code} value={district.name}>
-                              {district.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="col-md-4">
-                        <label className="form-label">Phường/Xã</label>
-                        <select
-                          className="form-control"
-                          name="address.ward"
-                          value={formData.address.ward}
-                          onChange={handleChange}
-                          required
-                          disabled={!wards.length}
-                        >
-                          <option value="">Phường/Xã</option>
-                          {wards.map((ward) => (
-                            <option key={ward.code} value={ward.name}>
-                              {ward.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+
+                <div className="mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Thành phố
+                      </label>
+                      <select
+                        className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        name="address.city"
+                        value={formData.address.city}
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="">Thành phố</option>
+                        {cities.map((city) => (
+                          <option key={city._id} value={city.name}>
+                            {city.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Quận/Huyện
+                      </label>
+                      <select
+                        className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        name="address.district"
+                        value={formData.address.district}
+                        onChange={handleChange}
+                        required
+                        disabled={!districts.length}
+                      >
+                        <option value="">Quận/Huyện</option>
+                        {districts.map((district) => (
+                          <option key={district.code} value={district.name}>
+                            {district.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Phường/Xã
+                      </label>
+                      <select
+                        className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        name="address.ward"
+                        value={formData.address.ward}
+                        onChange={handleChange}
+                        required
+                        disabled={!wards.length}
+                      >
+                        <option value="">Phường/Xã</option>
+                        {wards.map((ward) => (
+                          <option key={ward.code} value={ward.name}>
+                            {ward.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
+                </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="specificAddress" className="form-label">
-                      Địa chỉ cụ thể
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="specificAddress"
-                      name="address.specificAddress"
-                      value={formData.address.specificAddress}
-                      onChange={handleChange}
-                      placeholder="Nhập địa chỉ nhà"
-                      required
-                    />
-                  </div>
-                  {/* Loại tài khoản (Cá nhân, Shop bán hàng) */}
-                  <div className="mb-3">
-                    <div className="d-flex align-items-center">
-                      <div className="me-4">
-                        <label className="form-label">Loại tài khoản</label>
-                        <div className="d-flex">
-                          <div className="form-check me-3">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="accountType"
-                              id="personalAccount"
-                              value="personal"
-                              checked={formData.accountType === "personal"}
-                              onChange={handleChange}
-                              required
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="personalAccount"
-                            >
-                              Tài khoản cá nhân
-                            </label>
-                          </div>
-                          <div className="form-check me-3">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="accountType"
-                              id="shopAccount"
-                              value="shop"
-                              checked={formData.accountType === "shop"}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="shopAccount"
-                            >
-                              Shop bán hàng
-                            </label>
-                          </div>
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="accountType"
-                              id="shipperAccount"
-                              value="shipper"
-                              checked={formData.accountType === "shipper"}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="ShipperAccount"
-                            >
-                              Shipper
-                            </label>
-                          </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="specificAddress"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Địa chỉ cụ thể
+                  </label>
+                  <input
+                    type="text"
+                    className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    id="specificAddress"
+                    name="address.specificAddress"
+                    value={formData.address.specificAddress}
+                    onChange={handleChange}
+                    placeholder="Nhập địa chỉ nhà"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <div className="flex items-center">
+                    <div className="mr-6">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Loại tài khoản
+                      </label>
+                      <div className="flex space-x-4">
+                        <div className="flex items-center">
+                          <input
+                            className="mr-2"
+                            type="radio"
+                            name="accountType"
+                            id="personalAccount"
+                            value="personal"
+                            checked={formData.accountType === "personal"}
+                            onChange={handleChange}
+                            required
+                          />
+                          <label htmlFor="personalAccount" className="text-sm">
+                            Tài khoản cá nhân
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            className="mr-2"
+                            type="radio"
+                            name="accountType"
+                            id="shopAccount"
+                            value="shop"
+                            checked={formData.accountType === "shop"}
+                            onChange={handleChange}
+                          />
+                          <label htmlFor="shopAccount" className="text-sm">
+                            Shop bán hàng
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            className="mr-2"
+                            type="radio"
+                            name="accountType"
+                            id="shipperAccount"
+                            value="shipper"
+                            checked={formData.accountType === "shipper"}
+                            onChange={handleChange}
+                          />
+                          <label htmlFor="shipperAccount" className="text-sm">
+                            Shipper
+                          </label>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Vạch ngăn cách */}
-                      <div
-                        className="border-start mx-4"
-                        style={{ height: "50px" }}
-                      ></div>
+                    <div className="border-l-2 border-gray-300 h-12 mx-4"></div>
 
-                      <div>
-                        <label className="form-label">Giới tính</label>
-                        <div className="d-flex">
-                          <div className="form-check me-3">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="gender"
-                              id="male"
-                              value="male"
-                              checked={formData.gender === "male"}
-                              onChange={handleChange}
-                            />
-                            <label className="form-check-label" htmlFor="male">
-                              Nam
-                            </label>
-                          </div>
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="gender"
-                              id="female"
-                              value="female"
-                              checked={formData.gender === "female"}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="female"
-                            >
-                              Nữ
-                            </label>
-                          </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Giới tính
+                      </label>
+                      <div className="flex space-x-4">
+                        <div className="flex items-center">
+                          <input
+                            className="mr-2"
+                            type="radio"
+                            name="gender"
+                            id="male"
+                            value="male"
+                            checked={formData.gender === "male"}
+                            onChange={handleChange}
+                          />
+                          <label htmlFor="male" className="text-sm">
+                            Nam
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            className="mr-2"
+                            type="radio"
+                            name="gender"
+                            id="female"
+                            value="female"
+                            checked={formData.gender === "female"}
+                            onChange={handleChange}
+                          />
+                          <label htmlFor="female" className="text-sm">
+                            Nữ
+                          </label>
                         </div>
                       </div>
                     </div>
@@ -269,13 +279,17 @@ const AuthPage = ({
                 </div>
               </>
             )}
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
+
+            <div className="mb-4">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Mật khẩu
               </label>
               <input
                 type="password"
-                className="form-control"
+                className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 id="password"
                 name="password"
                 value={formData.password}
@@ -284,14 +298,18 @@ const AuthPage = ({
                 required
               />
             </div>
+
             {!isLogin && (
-              <div className="mb-3">
-                <label htmlFor="confirmPassword" className="form-label">
+              <div className="mb-4">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Nhập lại mật khẩu
                 </label>
                 <input
                   type="password"
-                  className="form-control"
+                  className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formData.confirmPassword}
@@ -301,19 +319,27 @@ const AuthPage = ({
                 />
               </div>
             )}
-            <div className="d-grid">
-              <button type="submit" className="btn btn-primary shadow">
+
+            <div className="d-grid mt-4">
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded-lg shadow-lg hover:bg-blue-700"
+              >
                 {isLogin ? "Đăng nhập" : "Đăng ký"}
               </button>
             </div>
           </form>
-          {message && <p className="text-center text-danger mt-3">{message}</p>}
+
+          {message && (
+            <p className="text-center text-red-600 mt-3">{message}</p>
+          )}
+
           <div className="text-center mt-3">
             <p>
               {isLogin ? "Bạn chưa có tài khoản?" : "Bạn đã có tài khoản?"}{" "}
               <button
                 type="button"
-                className="btn btn-link text-decoration-none p-0"
+                className="text-blue-600 hover:underline"
                 onClick={handleToggle}
               >
                 {isLogin ? "Đăng ký" : "Đăng nhập"}
@@ -322,6 +348,7 @@ const AuthPage = ({
           </div>
         </div>
       </div>
+
       {/* Modal khi đăng ký thành công */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
