@@ -10,12 +10,12 @@ function Header() {
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
-    if (isCartDropdownOpen) setIsCartDropdownOpen(!isCartDropdownOpen);
+    if (isCartDropdownOpen) setIsCartDropdownOpen(false);
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const toggleCartDropdown = () => {
-    if (isDropdownOpen) setIsDropdownOpen(!isDropdownOpen);
+    if (isDropdownOpen) setIsDropdownOpen(false);
     setIsCartDropdownOpen(!isCartDropdownOpen);
   };
 
@@ -29,10 +29,17 @@ function Header() {
   }, [setUser]);
 
   useEffect(() => {
-    // Lấy giỏ hàng từ localStorage
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     setCartItems(cart);
   }, []);
+
+  const handleRemoveFromCart = (productId) => {
+    const updatedCart = cartItems.filter(
+      (item) => item.productId !== productId
+    );
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
 
   const handleProfileClick = () => {
     navigate(`/personalpage/${user.displayName}`, { state: { user } });
@@ -86,14 +93,14 @@ function Header() {
                   <span className="ml-2">Giỏ Hàng</span>
                 </button>
                 {isCartDropdownOpen && (
-                  <div className="absolute right-[-200px] mt-2 w-80 bg-white border rounded shadow-lg z-50">
+                  <div className="absolute right-[-200px] mt-2 w-[360px] bg-white border rounded shadow-lg z-50">
                     {cartItems.length > 0 ? (
                       <div>
                         <ul className="divide-y">
-                          {cartItems.map((item, index) => (
+                          {cartItems.map((item) => (
                             <li
-                              key={index}
-                              className="px-4 py-2 flex items-center space-x-4 hover:bg-gray-100 cursor-pointer"
+                              key={item.productId}
+                              className="flex items-center space-x-4 hover:bg-gray-100 cursor-pointer"
                               onClick={() =>
                                 navigate(`/product/${item.productId}`)
                               }
@@ -101,7 +108,7 @@ function Header() {
                               <img
                                 src={`http://localhost:3000/${item.image}`}
                                 alt={item.productName}
-                                className="w-12 h-12 object-cover rounded"
+                                className="px-2 py-2 w-[70px] h-[70px] object-cover rounded"
                               />
                               <div className="flex-1">
                                 <p className="text-sm font-medium text-gray-700">
@@ -117,6 +124,14 @@ function Header() {
                                 ).toLocaleString()}
                                 ₫
                               </p>
+                              <button
+                                onClick={() =>
+                                  handleRemoveFromCart(item.productId)
+                                }
+                                className="font-bol text-red-500 hover:text-red-900 hover:bg-gray-300 h-100 px-4 py-4 border-l"
+                              >
+                                Xóa
+                              </button>
                             </li>
                           ))}
                         </ul>
