@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductDetailPage = ({ product }) => {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const UserData = JSON.parse(localStorage.getItem("user"));
-  const cart = JSON.parse(localStorage.getItem("cart")) || []; // Lấy giỏ hàng hiện tại từ localStorage
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const [quantity, setQuantity] = useState(1);
   const [address, setAddress] = useState(
     `${UserData.address.specificAddress}, ${UserData.address.ward}, ${UserData.address.district}, ${UserData.address.city}`
@@ -33,30 +35,31 @@ const ProductDetailPage = ({ product }) => {
     );
 
     if (existingProductIndex >= 0) {
-      // Sản phẩm đã tồn tại trong giỏ hàng
       cart[existingProductIndex].quantity += quantity;
     } else {
-      // Thêm sản phẩm mới vào giỏ hàng
       cart.push({
         productId: id,
         productName: product.productName,
         quantity: quantity,
         productPrice: product.productPrice,
-        image: product.singleImage, // Lưu hình ảnh đầu tiên làm đại diện
+        image: product.singleImage,
       });
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart)); // Lưu giỏ hàng vào localStorage
-    alert(`Đã thêm ${quantity} ${product.productName} vào giỏ hàng!`);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    toast.success(
+      `${quantity} ${product.productName} đã được thêm vào giỏ hàng!`
+    );
   };
 
   const handleBuyNow = async () => {
     if (UserData.accountType === "shop" || UserData.accountType === "shipper") {
-      alert("Shop và Shipper không thể đặc hàng!");
+      toast.error("Shop và Shipper không thể đặt hàng!");
       return;
     }
+
     if (!address) {
-      alert("Vui lòng nhập địa chỉ giao hàng!" + address);
+      toast.error("Vui lòng nhập địa chỉ giao hàng!");
       return;
     }
 
@@ -81,15 +84,16 @@ const ProductDetailPage = ({ product }) => {
         },
         body: JSON.stringify(orderData),
       });
+
       if (response.ok) {
-        alert("Đặt hàng thành công!");
+        toast.success("Đặt hàng thành công!");
         setShowAddressForm(false);
         setAddress("");
       } else {
         throw new Error("Đặt hàng thất bại!");
       }
     } catch (error) {
-      alert("Có lỗi xảy ra khi đặt hàng!");
+      toast.error("Có lỗi xảy ra khi đặt hàng!");
     }
   };
 
@@ -98,7 +102,7 @@ const ProductDetailPage = ({ product }) => {
     setQuantity(value);
   };
 
-  const handleShowAddressForm = (e) => {
+  const handleShowAddressForm = () => {
     setShowAddressForm(true);
     setAddress(
       UserData.address.specificAddress +
@@ -119,14 +123,13 @@ const ProductDetailPage = ({ product }) => {
     if (existingProductIndex >= 0) {
       setQuantity(cart[existingProductIndex].quantity);
     }
-    console.log(existingProductIndex);
   }, [id]);
 
   const calculatedPrice = product.productPrice * quantity;
 
   return (
     <div className="container mx-auto px-4 py-6">
-      {/* Carousel Hình Ảnh */}
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="relative w-full mb-6 overflow-hidden rounded-lg shadow-md">
         <img
           src={`http://localhost:3000/${product.multiImages[currentImageIndex]}`}
@@ -157,7 +160,6 @@ const ProductDetailPage = ({ product }) => {
           ))}
         </div>
       </div>
-      {/* Thông Tin Sản Phẩm */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
@@ -210,39 +212,38 @@ const ProductDetailPage = ({ product }) => {
           </div>
         </div>
       </div>
-      {/* Form Nhập Địa Chỉ */}
       {showAddressForm && (
         <div className="bg-white p-6 mt-6 rounded-lg shadow-md border">
           <div className="mb-4">
             <label htmlFor="address" className="block text-gray-700 mb-2">
-              Nhập địa chỉ giao hàng :
+              Nhập địa chỉ giao hàng:
             </label>
             <input
               type="text"
               id="address"
               className="w-full border border-gray-300 rounded px-3 py-2"
-              value={address} // Giá trị được quản lý bởi state
-              onChange={(e) => setAddress(e.target.value)} // Cập nhật giá trị state khi người dùng nhập liệu
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               required
             />
           </div>
           <div className="mb-4">
             <label htmlFor="phone" className="block text-gray-700 mb-2">
-              Nhập số điện thoại :
+              Nhập số điện thoại:
             </label>
             <input
               type="text"
               id="phone"
               className="w-full border border-gray-300 rounded px-3 py-2"
-              value={phone} // Giá trị được quản lý bởi state
-              onChange={(e) => setPhone(e.target.value)} // Cập nhật giá trị state khi người dùng nhập liệu
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               required
             />
           </div>
           <div className="flex gap-4">
             <button
               className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
-              onClick={() => handleBuyNow(address, phone)} // Gửi địa chỉ và số điện thoại được cập nhật
+              onClick={() => handleBuyNow()}
             >
               Xác nhận mua hàng
             </button>
