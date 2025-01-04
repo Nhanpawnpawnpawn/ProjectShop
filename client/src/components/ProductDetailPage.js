@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UserContext from "../components/context/UserContext";
 
 const ProductDetailPage = ({ product }) => {
   const { id } = useParams();
+  const { addToCart } = useContext(UserContext);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const UserData = JSON.parse(localStorage.getItem("user"));
@@ -30,25 +32,17 @@ const ProductDetailPage = ({ product }) => {
   };
 
   const handleAddToCart = () => {
-    const existingProductIndex = cart.findIndex(
-      (item) => item.productId === id
-    );
-
-    if (existingProductIndex >= 0) {
-      cart[existingProductIndex].quantity += quantity;
-    } else {
-      cart.push({
-        productId: id,
-        productName: product.productName,
-        quantity: quantity,
-        productPrice: product.productPrice,
-        image: product.singleImage,
-      });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
+    addToCart({
+      productId: id,
+      productName: product.productName,
+      quantity: quantity,
+      productPrice: product.productPrice,
+      image: product.singleImage,
+    });
     toast.success(
-      `${quantity} ${product.productName} đã được thêm vào giỏ hàng!`
+      <span>
+        Đã thêm {quantity} <b>({product.productName})</b> vào giỏ hàng!
+      </span>
     );
   };
 

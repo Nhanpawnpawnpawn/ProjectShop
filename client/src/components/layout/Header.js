@@ -3,10 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../components/context/UserContext";
 
 function Header() {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, cartItems, removeFromCart } = useContext(UserContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCartDropdownOpen, setIsCartDropdownOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
@@ -27,19 +26,6 @@ function Header() {
       setUser(savedUser);
     }
   }, [setUser]);
-
-  useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(cart);
-  }, []);
-
-  const handleRemoveFromCart = (productId) => {
-    const updatedCart = cartItems.filter(
-      (item) => item.productId !== productId
-    );
-    setCartItems(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-  };
 
   const handleProfileClick = () => {
     navigate(`/personalpage/${user.displayName}`, { state: { user } });
@@ -101,16 +87,21 @@ function Header() {
                             <li
                               key={item.productId}
                               className="flex items-center space-x-4 hover:bg-gray-100 cursor-pointer"
-                              onClick={() =>
-                                navigate(`/product/${item.productId}`)
-                              }
                             >
                               <img
                                 src={`http://localhost:3000/${item.image}`}
                                 alt={item.productName}
                                 className="px-2 py-2 w-[70px] h-[70px] object-cover rounded"
+                                onClick={() =>
+                                  navigate(`/product/${item.productId}`)
+                                }
                               />
-                              <div className="flex-1">
+                              <div
+                                className="flex-1"
+                                onClick={() =>
+                                  navigate(`/product/${item.productId}`)
+                                }
+                              >
                                 <p className="text-sm font-medium text-gray-700">
                                   {item.productName}
                                 </p>
@@ -118,16 +109,19 @@ function Header() {
                                   Số lượng: {item.quantity}
                                 </p>
                               </div>
-                              <p className="text-sm font-medium text-gray-800">
+                              <p
+                                className="text-sm font-medium text-gray-800"
+                                onClick={() =>
+                                  navigate(`/product/${item.productId}`)
+                                }
+                              >
                                 {(
                                   item.productPrice * item.quantity
                                 ).toLocaleString()}
                                 ₫
                               </p>
                               <button
-                                onClick={() =>
-                                  handleRemoveFromCart(item.productId)
-                                }
+                                onClick={() => removeFromCart(item.productId)}
                                 className="font-bol text-red-500 hover:text-red-900 hover:bg-gray-300 h-100 px-4 py-4 border-l"
                               >
                                 Xóa

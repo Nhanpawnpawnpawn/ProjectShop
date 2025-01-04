@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ShipperOrders = () => {
   const { shopName } = useParams();
@@ -44,6 +46,7 @@ const ShipperOrders = () => {
             order._id === orderId ? { ...order, status: "Đã Giao" } : order
           )
         );
+        toast.success(`Đơn hàng ${orderId} đã được giao thành công`);
       }
     } catch (error) {
       console.error("Error marking order as delivered:", error);
@@ -52,6 +55,7 @@ const ShipperOrders = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      <ToastContainer position="top-right" autoClose={3000} />
       <h3 className="text-xl font-bold mb-6">
         Đơn Hàng Của Shipper {shopName}
       </h3>
