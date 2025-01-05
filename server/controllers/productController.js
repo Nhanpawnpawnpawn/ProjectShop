@@ -42,14 +42,18 @@ const getAllProducts = async (req, res) => {
 // Controller: Lấy sản phẩm theo thời gian mới nhất
 const getProducts = async (req, res) => {
   try {
-    const { page = 1, limit = 40, sort = "-createdAt" } = req.query;
+    const { page = 1, limit = 40, sort = "-createdAt", q = "" } = req.query;
 
-    const products = await Product.find()
+    const searchQuery = q
+      ? { productName: { $regex: q, $options: "i" } } // Tìm kiếm không phân biệt chữ hoa/thường
+      : {};
+
+    const products = await Product.find(searchQuery)
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    const totalProducts = await Product.countDocuments();
+    const totalProducts = await Product.countDocuments(searchQuery);
 
     res.status(200).json({
       data: products,

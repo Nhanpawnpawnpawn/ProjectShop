@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../components/context/UserContext";
 
-function Header() {
+function Header({ fetchProducts }) {
   const { user, setUser, cartItems, removeFromCart } = useContext(UserContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCartDropdownOpen, setIsCartDropdownOpen] = useState(false);
@@ -38,6 +38,23 @@ function Header() {
     navigate("/");
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    fetchProducts(currentPage, searchQuery); // Truyền từ khóa vào hàm fetchProducts
+  }, [currentPage, searchQuery]);
+
+  const handleSearch = (event) => {
+    if (!inputValue) {
+      return;
+    }
+    event.preventDefault();
+    setSearchQuery(inputValue);
+    setCurrentPage(1); // Reset lại trang khi tìm kiếm mới
+  };
+
   return (
     <nav className="bg-white border-b">
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
@@ -51,9 +68,14 @@ function Header() {
         </Link>
 
         {/* Search Bar */}
-        <form className="hidden md:flex items-center w-1/2">
+        <form
+          onSubmit={handleSearch}
+          className="hidden md:flex items-center w-1/2"
+        >
           <input
             type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             className="flex-grow p-2 border rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Tìm kiếm sản phẩm..."
           />

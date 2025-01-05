@@ -45,9 +45,7 @@ const ProductView = () => {
 
   return (
     <>
-      <Header />
       <ProductDetailPage product={product} />
-      <Footer />
     </>
   );
 };

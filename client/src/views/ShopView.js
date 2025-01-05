@@ -48,10 +48,8 @@ const ShopView = () => {
 
   return (
     <>
-      <Header />
       <CustomerShopLayout shopInfo={shopInfo} /> {/* Truyền thông tin shop */}
       <Card cards={cards} hasMore={hasMore} fetchProducts={fetchProducts} />
-      <Footer />
     </>
   );
 };
