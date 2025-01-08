@@ -10,11 +10,11 @@ const orderController = require("../controllers/orderController");
 const revenueController = require("../controllers/revenueController");
 const addressController = require("../controllers/addressController");
 //Cấu hình multer để lưu ảnh
-const upload = require("../middlewares/upload");
+const uploadFields = require("../middlewares/upload");
 const uploadAvatar = require("../middlewares/uploadAvatar");
 
 // Định nghĩa các route
-router.post("/products", upload, productController.addProduct);
+router.post("/products", uploadFields, productController.addProduct);
 router.get("/products/", productController.getProducts);
 router.get("/products/:id", productController.getProductById);
 router.get("/productshop/:shopName", productController.getProductByShopName);
@@ -33,7 +33,7 @@ router.post(
 
 // Route Sửa Xoá Sản Phẩm
 router.delete("/products/:id", productController.deleteProduct);
-router.put("/products/:id", upload, productController.updateProduct);
+router.put("/products/:id", uploadFields, productController.updateProduct);
 
 // Route Đặc Hàng
 router.post("/orders", orderController.createOrder);

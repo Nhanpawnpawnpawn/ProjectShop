@@ -47,9 +47,6 @@ function Header({ fetchProducts }) {
   }, [currentPage, searchQuery]);
 
   const handleSearch = (event) => {
-    if (!inputValue) {
-      return;
-    }
     event.preventDefault();
     setSearchQuery(inputValue);
     setCurrentPage(1); // Reset lại trang khi tìm kiếm mới

@@ -1,4 +1,3 @@
-// middlewares/upload.js
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -10,9 +9,11 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage }).fields([
+const upload = multer({ storage });
+
+const uploadFields = upload.fields([
   { name: "singleImage", maxCount: 1 },
   { name: "multiImages", maxCount: 10 },
 ]);
 
-module.exports = upload;
+module.exports = uploadFields;

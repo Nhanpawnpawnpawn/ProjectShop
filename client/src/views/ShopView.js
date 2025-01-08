@@ -38,7 +38,6 @@ const ShopView = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Dữ liệu shop:", data);
         setShopInfo(data[0]); // Lấy thông tin shop từ mảng
       })
       .catch((error) => {

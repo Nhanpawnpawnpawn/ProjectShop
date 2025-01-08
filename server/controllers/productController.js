@@ -5,8 +5,17 @@ const Product = require("../models/productModel");
 // Controller: Thêm sản phẩm
 const addProduct = async (req, res) => {
   try {
-    const { productName, productDescription, productPrice, shopName, stars } =
-      req.body;
+    const {
+      productName,
+      productDescription,
+      productPrice,
+      shopName,
+      stars,
+      type,
+      attributes,
+      sizes,
+    } = req.body;
+
     const singleImage = req.files.singleImage[0].path;
     const multiImages = req.files.multiImages.map((file) => file.path);
 
@@ -16,8 +25,11 @@ const addProduct = async (req, res) => {
       productPrice,
       shopName,
       stars,
+      type,
       singleImage,
       multiImages,
+      attributes,
+      sizes,
     });
 
     await newProduct.save();
@@ -25,6 +37,7 @@ const addProduct = async (req, res) => {
       .status(201)
       .json({ message: "Thêm sản phẩm thành công!", product: newProduct });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
