@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import UserContext from "../../components/context/UserContext";
+import UserContext from "../../context/UserContext";
 
 function Header({ fetchProducts }) {
   const { user, setUser, cartItems, removeFromCart } = useContext(UserContext);

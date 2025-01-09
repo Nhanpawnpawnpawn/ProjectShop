@@ -2,8 +2,9 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import UserContext from "../components/context/UserContext";
+import UserContext from "../context/UserContext";
 import { FaShoppingCart, FaMoneyBillWave, FaStore } from "react-icons/fa";
+import CartProduct from "./actions/CartProduct";
 
 const ProductDetailPage = ({ product }) => {
   // Lấy id sản phẩm từ URL
@@ -13,7 +14,9 @@ const ProductDetailPage = ({ product }) => {
   const { addToCart } = useContext(UserContext);
 
   // Khởi tạo state cho các thuộc tính sản phẩm
-  const [price, setPrice] = useState(product.attributes[0]?.price || 0);
+  const [price, setPrice] = useState(
+    product.attributes[0]?.price || product.productPrice
+  );
   const [selectedType, setSelectedType] = useState(
     product.attributes[0]?.name || ""
   );
@@ -50,6 +53,9 @@ const ProductDetailPage = ({ product }) => {
   );
   const [phone, setPhone] = useState(UserData.phone);
 
+  // Tính toán tổng giá
+  const calculatedPrice = price * quantity;
+
   // Xử lý khi người dùng nhấn "Mua ngay"
   const handleBuyNow = async () => {
     if (!UserData) {
@@ -71,7 +77,7 @@ const ProductDetailPage = ({ product }) => {
       productName: product.productName,
       customerName: UserData?.displayName,
       shopName: product.shopName,
-      totalAmount: product.productPrice * quantity,
+      totalAmount: calculatedPrice,
       address: address,
       phone: phone,
       status: "Đặt Hàng",
@@ -143,9 +149,6 @@ const ProductDetailPage = ({ product }) => {
     }
   }, [id]);
 
-  // Tính toán tổng giá
-  const calculatedPrice = price * quantity;
-
   // Lấy thông tin shop từ API
   const [shopInfo, setShopInfo] = useState(null);
   useEffect(() => {
@@ -196,41 +199,46 @@ const ProductDetailPage = ({ product }) => {
           </h3>
 
           {/* Lựa chọn loại */}
-          <div className="mb-4">
-            <span className="text-gray-700 mr-2">{product.type} : </span>
-            {product.attributes.map((attr, index) => (
-              <button
-                key={index}
-                onClick={() => handleTypeChange(attr.name, index)}
-                className={`py-1 px-3 rounded border mr-2 mt-1 ${
-                  selectedType === attr.name
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-gray-700"
-                } hover:bg-blue-400 hover:text-white transition`}
-              >
-                {attr.name}
-              </button>
-            ))}
-          </div>
+          {product.attributes && product.attributes.length > 0 && (
+            <div className="mb-4">
+              <span className="text-gray-700 mr-2">{product.type} : </span>
+              {product.attributes.map((attr, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleTypeChange(attr.name, index)}
+                  className={`py-1 px-3 rounded border mr-2 mt-1 ${
+                    selectedType === attr.name
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-700"
+                  } hover:bg-blue-400 hover:text-white transition`}
+                >
+                  {attr.name}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Lựa chọn kích thước */}
-          <div className="mb-4">
-            <span className="text-gray-700 mr-2">Kích thước :</span>
-            {product.sizes.map((size, index) => (
-              <button
-                key={index}
-                onClick={() => handleSizeChange(size)}
-                className={`py-1 px-3 rounded border mr-2 mt-1 ${
-                  selectedSize === size
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-gray-700"
-                } hover:bg-blue-400 hover:text-white transition`}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="mb-4">
+              <span className="text-gray-700 mr-2">Kích thước:</span>
+              {product.sizes.map((size, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSizeChange(size)}
+                  className={`py-1 px-3 rounded border mr-2 mt-1 ${
+                    selectedSize === size
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-700"
+                  } hover:bg-blue-400 hover:text-white transition`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          )}
 
+          {/* Số Lượng */}
           <div className="flex items-center mb-4">
             <span className="text-gray-700 mr-2">Số lượng :</span>
             <input
@@ -361,6 +369,7 @@ const ProductDetailPage = ({ product }) => {
           <p className="text-gray-700">Hiện chưa có bình luận nào.</p>
         </div>
       </div>
+      <CartProduct />
     </div>
   );
 };

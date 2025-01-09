@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaComment } from "react-icons/fa"; // Importing the comment icon
+import CartProduct from "./actions/CartProduct";
 
 const CustomerShopLayout = ({ shopInfo }) => {
   const [comments, setComments] = useState([
@@ -73,6 +74,7 @@ const CustomerShopLayout = ({ shopInfo }) => {
           <FaComment size={20} />
         </button>
       </div>
+      <CartProduct />
     </div>
   );
 };

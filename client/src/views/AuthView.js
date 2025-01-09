@@ -2,7 +2,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthPage from "../components/AuthPage";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../components/context/UserContext";
+import UserContext from "../context/UserContext";
 import axios from "axios";
 
 const AuthView = () => {
