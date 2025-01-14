@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Header from "../components/layout/Header";
-import CustomerShopLayout from "../components/CustomerShopLayout";
-import Footer from "../components/layout/Footer";
-import Card from "../components/layout/Card";
+import ShopPage from "../pages/ShopPage";
+import Card from "../components/Card";
 
 const ShopView = () => {
   const [cards, setCards] = useState([]); // Dữ liệu sản phẩm
@@ -47,7 +45,7 @@ const ShopView = () => {
 
   return (
     <>
-      <CustomerShopLayout shopInfo={shopInfo} /> {/* Truyền thông tin shop */}
+      <ShopPage shopInfo={shopInfo} /> {/* Truyền thông tin shop */}
       <Card cards={cards} hasMore={hasMore} fetchProducts={fetchProducts} />
     </>
   );

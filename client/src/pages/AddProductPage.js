@@ -3,7 +3,7 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddProduct = ({ userData }) => {
+const AddProductPage = ({ userData }) => {
   const [singleImage, setSingleImage] = useState(null);
   const [multiImages, setMultiImages] = useState([]);
   const [formData, setFormData] = useState({
@@ -341,4 +341,4 @@ const AddProduct = ({ userData }) => {
   );
 };
 
-export default AddProduct;
+export default AddProductPage;

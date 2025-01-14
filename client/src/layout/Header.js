@@ -1,21 +1,25 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import UserContext from "../../context/UserContext";
+import UserContext from "../context/UserContext";
 
 function Header({ fetchProducts }) {
-  const { user, setUser, cartItems, removeFromCart } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const notifications = [
+    { title: "Khuyến mãi", message: "Giảm giá 50% cho đơn hàng hôm nay!" },
+    { title: "Cập nhật", message: "Phiên bản mới đã được cập nhật." },
+  ];
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isCartDropdownOpen, setIsCartDropdownOpen] = useState(false);
+  const [isNotifydownOpen, setisNotifydownOpen] = useState(false);
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
-    if (isCartDropdownOpen) setIsCartDropdownOpen(false);
+    if (isNotifydownOpen) setisNotifydownOpen(false);
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const toggleCartDropdown = () => {
+  const toggleNotifyDropdown = () => {
     if (isDropdownOpen) setIsDropdownOpen(false);
-    setIsCartDropdownOpen(!isCartDropdownOpen);
+    setisNotifydownOpen(!isNotifydownOpen);
   };
 
   useEffect(() => {
@@ -88,69 +92,41 @@ function Header({ fetchProducts }) {
         <div className="flex items-center space-x-4">
           {user.isLoggedIn ? (
             <>
-              {/* Cart */}
+              {/* Notify */}
               <div className="relative">
                 <button
-                  onClick={toggleCartDropdown}
+                  onClick={toggleNotifyDropdown}
                   className="text-gray-700 hover:text-blue-500 flex items-center"
                 >
-                  <i className="fa fa-shopping-cart text-xl"></i>
-                  <span className="ml-2">Giỏ Hàng</span>
+                  <i className="fa fa-bell text-xl"></i>
+                  <span className="ml-2">Thông Báo</span>
                 </button>
-                {isCartDropdownOpen && (
+                {isNotifydownOpen && (
                   <div className="absolute right-[-200px] mt-2 w-[360px] bg-white border rounded shadow-lg z-50">
-                    {cartItems.length > 0 ? (
+                    {notifications && notifications.length > 0 ? (
                       <div>
                         <ul className="divide-y">
-                          {cartItems.map((item) => (
+                          {notifications.map((notification, index) => (
                             <li
-                              key={item.productId}
-                              className="flex items-center space-x-4 hover:bg-gray-100 cursor-pointer"
+                              key={index}
+                              className="flex items-center space-x-4 hover:bg-gray-100 cursor-pointer px-4 py-2"
                             >
-                              <img
-                                src={`http://localhost:3000/${item.image}`}
-                                alt={item.productName}
-                                className="px-2 py-2 w-[70px] h-[70px] object-cover rounded"
-                                onClick={() =>
-                                  navigate(`/product/${item.productId}`)
-                                }
-                              />
-                              <div
-                                className="flex-1"
-                                onClick={() =>
-                                  navigate(`/product/${item.productId}`)
-                                }
-                              >
+                              <div className="flex-1">
                                 <p className="text-sm font-medium text-gray-700">
-                                  {item.productName}
+                                  {notification.title}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                  Số lượng: {item.quantity}
+                                  {notification.message}
                                 </p>
                               </div>
-                              <p
-                                className="text-sm font-medium text-gray-800"
-                                onClick={() =>
-                                  navigate(`/product/${item.productId}`)
-                                }
-                              >
-                                {(
-                                  item.productPrice * item.quantity
-                                ).toLocaleString()}
-                                ₫
-                              </p>
-                              <button
-                                onClick={() => removeFromCart(item.productId)}
-                                className="font-bol text-red-500 hover:text-red-900 hover:bg-gray-300 h-100 px-4 py-4 border-l"
-                              >
-                                Xóa
-                              </button>
                             </li>
                           ))}
                         </ul>
                       </div>
                     ) : (
-                      <div className="p-4 text-gray-700">Giỏ hàng trống</div>
+                      <div className="p-4 text-gray-700">
+                        Hiện chưa có thông báo nào
+                      </div>
                     )}
                   </div>
                 )}

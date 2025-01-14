@@ -1,19 +1,32 @@
 import React from "react";
-import EditProduct from "../components/actions/EditProduct";
+import EditProductPage from "../pages/EditProductPage";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
-const EditProductView = () => {
+const EditProductPageView = () => {
   const { productId } = useParams();
 
   const fetchProduct = async (productId) => {
-    const response = await fetch(
-      `http://localhost:5000/api/products/${productId}`
-    );
-    if (!response.ok) {
-      throw new Error(`API trả về lỗi: ${response.status}`);
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/products/${productId}`
+      );
+      return response.data; // Dữ liệu JSON đã được parse tự động
+    } catch (error) {
+      // Xử lý lỗi HTTP hoặc lỗi mạng
+      if (error.response) {
+        // Lỗi từ server (có response)
+        throw new Error(
+          `API trả về lỗi: ${error.response.status} - ${error.response.data}`
+        );
+      } else if (error.request) {
+        // Lỗi do không nhận được response (network)
+        throw new Error("Không thể kết nối đến server.");
+      } else {
+        // Lỗi khác
+        throw new Error(`Đã xảy ra lỗi: ${error.message}`);
+      }
     }
-    const data = await response.json();
-    return data;
   };
 
   const updateProduct = async (productId, productData) => {
@@ -49,7 +62,7 @@ const EditProductView = () => {
   };
 
   return (
-    <EditProduct
+    <EditProductPage
       productId={productId}
       fetchProduct={fetchProduct}
       updateProduct={updateProduct}
@@ -57,4 +70,4 @@ const EditProductView = () => {
   );
 };
 
-export default EditProductView;
+export default EditProductPageView;

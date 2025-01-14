@@ -4,9 +4,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserContext from "../context/UserContext";
 import { FaShoppingCart, FaMoneyBillWave, FaStore } from "react-icons/fa";
-import CartProduct from "./actions/CartProduct";
+import Cart from "../components/Cart";
 
-const ProductDetailPage = ({ product }) => {
+const ProductPage = ({ product }) => {
   // Lấy id sản phẩm từ URL
   const { id } = useParams();
 
@@ -369,9 +369,9 @@ const ProductDetailPage = ({ product }) => {
           <p className="text-gray-700">Hiện chưa có bình luận nào.</p>
         </div>
       </div>
-      <CartProduct />
+      <Cart />
     </div>
   );
 };
 
-export default ProductDetailPage;
+export default ProductPage;

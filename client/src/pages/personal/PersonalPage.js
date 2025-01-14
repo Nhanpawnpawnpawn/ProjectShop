@@ -12,7 +12,7 @@ import {
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PersonalInfo from "./PersonalInfo";
 import ProductList from "./ProductList";
-import AddProduct from "../actions/AddProduct";
+import AddProduct from "./../../pages/AddProductPage";
 import Revenue from "./Revenue";
 import ShopOrders from "./ShopOrders";
 import CustomerOrders from "./CustomerOrders";

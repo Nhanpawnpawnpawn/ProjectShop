@@ -1,10 +1,10 @@
 import { FaShoppingCart } from "react-icons/fa"; // Import icon giỏ hàng
-import UserContext from "../../context/UserContext";
+import UserContext from "../context/UserContext";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Thêm nút hiển thị giỏ hàng
-const CartProduct = ({ onClick }) => {
+const Cart = () => {
   const navigate = useNavigate();
   const { cartItems, removeFromCart } = useContext(UserContext);
   const [isCartDropdownOpen, setIsCartDropdownOpen] = useState(false);
@@ -15,10 +15,10 @@ const CartProduct = ({ onClick }) => {
     <div>
       <button
         onClick={toggleCartDropdown}
-        className="fixed bottom-[20px] right-3 bg-blue-500 text-white px-[16px] py-[10px] rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 z-50"
+        className="fixed bottom-5 right-5 bg-gradient-to-r from-green-400 to-green-600 text-white px-6 py-4 rounded-full shadow-lg hover:scale-110 transform transition-all duration-300 z-50 flex items-center space-x-2"
         title="Xem giỏ hàng"
       >
-        <FaShoppingCart size={20} />
+        <FaShoppingCart size={24} />
       </button>
       {isCartDropdownOpen && (
         <div className="fixed bottom-[60px] right-[60px] w-[360px] bg-white border rounded shadow-lg z-50">
@@ -72,4 +72,4 @@ const CartProduct = ({ onClick }) => {
   );
 };
 
-export default CartProduct;
+export default Cart;

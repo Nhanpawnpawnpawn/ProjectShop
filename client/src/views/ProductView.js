@@ -1,8 +1,6 @@
 // src/views/ProductView.js
 import React from "react";
-import Header from "../components/layout/Header";
-import ProductDetailPage from "../components/ProductDetailPage";
-import Footer from "../components/layout/Footer";
+import ProductPage from "../pages/ProductPage";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -45,7 +43,7 @@ const ProductView = () => {
 
   return (
     <>
-      <ProductDetailPage product={product} />
+      <ProductPage product={product} />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import "../../css/card.css";
+import "../css/card.css";
 
 function Card({ cards, hasMore, fetchProducts }) {
   const [currentPage, setCurrentPage] = useState(1);

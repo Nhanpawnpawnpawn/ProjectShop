@@ -1,6 +1,6 @@
 // src/views/AuthView.js
 import React, { useState, useContext, useEffect } from "react";
-import AuthPage from "../components/AuthPage";
+import AuthPage from "../pages/AuthPage";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import axios from "axios";

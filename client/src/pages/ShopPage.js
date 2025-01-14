@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { FaComment } from "react-icons/fa"; // Importing the comment icon
-import CartProduct from "./actions/CartProduct";
+import Cart from "../components/Cart";
 
-const CustomerShopLayout = ({ shopInfo }) => {
+const ShopPage = ({ shopInfo }) => {
   const [comments, setComments] = useState([
     { id: 1, author: "John", text: "Great shop, fast shipping!" },
     { id: 2, author: "Jane", text: "Excellent quality products." },
@@ -74,9 +74,9 @@ const CustomerShopLayout = ({ shopInfo }) => {
           <FaComment size={20} />
         </button>
       </div>
-      <CartProduct />
+      <Cart />
     </div>
   );
 };
 
-export default CustomerShopLayout;
+export default ShopPage;

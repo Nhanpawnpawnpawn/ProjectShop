@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaSave } from "react-icons/fa";
 
-const EditProduct = ({ productId, fetchProduct, updateProduct }) => {
+const EditProductPage = ({ productId, fetchProduct, updateProduct }) => {
   const [productData, setProductData] = useState({
     productName: "",
     productDescription: "",
@@ -217,4 +217,4 @@ const EditProduct = ({ productId, fetchProduct, updateProduct }) => {
   );
 };
 
-export default EditProduct;
+export default EditProductPage;

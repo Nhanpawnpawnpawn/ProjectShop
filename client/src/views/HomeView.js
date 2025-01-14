@@ -2,10 +2,11 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import Header from "../components/layout/Header";
-import Carousel from "../components/layout/Carousel";
-import Card from "../components/layout/Card";
-import Footer from "../components/layout/Footer";
+import Header from "../layout/Header";
+import Carousel from "../layout/Carousel";
+import Card from "../components/Card";
+import Footer from "../layout/Footer";
+import Cart from "../components/Cart";
 
 const HomeView = () => {
   const [cards, setCards] = useState([]);
@@ -35,6 +36,7 @@ const HomeView = () => {
         <Carousel />
         <Card cards={cards} hasMore={hasMore} fetchProducts={fetchProducts} />
       </div>
+      <Cart />
       <Footer />
     </>
   );
